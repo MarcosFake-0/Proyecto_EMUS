@@ -1,7 +1,18 @@
+using Microsoft.EntityFrameworkCore;
+using Proyecto_EMUS.Data;
+using Proyecto_EMUS.Data.Interfaces;
+using Proyecto_EMUS.Data.Repository;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
 
 var app = builder.Build();
 
