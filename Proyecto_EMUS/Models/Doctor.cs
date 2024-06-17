@@ -23,7 +23,7 @@ namespace Proyecto_EMUS.Models
         [Required]
         public string UrlImage { get; set; }
 
-
+        public List<Specialty> specialties { get; set; }
 
 
     }
