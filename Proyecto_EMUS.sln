@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34728.123
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Proyecto_EMUS", "Proyecto_EMUS\Proyecto_EMUS.csproj", "{D5B52BD1-EA2F-49AC-A714-F5001576CF6B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D5B52BD1-EA2F-49AC-A714-F5001576CF6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5B52BD1-EA2F-49AC-A714-F5001576CF6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5B52BD1-EA2F-49AC-A714-F5001576CF6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5B52BD1-EA2F-49AC-A714-F5001576CF6B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1438227E-A364-4329-BA2B-6F61C6DFB30A}
+	EndGlobalSection
+EndGlobal
