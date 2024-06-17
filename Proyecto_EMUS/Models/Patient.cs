@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Proyecto_EMUS.Models
 {
-    public class Pacient
+    public class Patient
     {
         [Key]
         public int Id { get; set; }
@@ -24,7 +25,8 @@ namespace Proyecto_EMUS.Models
         [Required]
         public string CivilStatus { get; set; }
 
-
+        [ForeignKey("Doctor")]
+        public int AttendingDoctor { get; set; }
 
         
     }
