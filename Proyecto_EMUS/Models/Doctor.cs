@@ -25,6 +25,6 @@ namespace Proyecto_EMUS.Models
 
         public List<Specialty> Specialties { get; set; }
 
-
+        //Prueba
     }
 }
