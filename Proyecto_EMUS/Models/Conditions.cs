@@ -2,7 +2,7 @@
 
 namespace Proyecto_EMUS.Models
 {
-    public class Coditions
+    public class Conditions
     {
         [Key]
         public int Id { get; set; }
