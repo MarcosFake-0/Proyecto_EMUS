@@ -28,6 +28,9 @@ namespace Proyecto_EMUS.Models
         [ForeignKey("Doctor")]
         public int AttendingDoctor { get; set; }
 
+        [DataType(DataType.Date)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]
+        public DateTime LastAttendDate { get; set; }
         
     }
 }
