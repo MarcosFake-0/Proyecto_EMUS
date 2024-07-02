@@ -1,0 +1,30 @@
+﻿@model Specialty
+
+
+<form method="post">
+    <div>
+        <div>
+            <h2 class="text-info">Eliminar Especialidad</h2>
+        </div>
+
+
+
+        <div>
+            <label asp-for="Name" class="p-0"></label>
+            <input asp-for="Name" readonly type="text" class="form-control" />
+
+        </div>
+        <div>
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+
+        <button type="submit" class="btn btn-primary" style="width: 150px">Eliminar</button>
+        <a asp-area="Admin" asp-controller="Specialty" asp-action="Index" readonly style="width: 150px" class="btn btn-secondary"> Regresar a Lista de Eventos </a>
+    </div>
+
+</form>
+
+@* @section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+} *@
