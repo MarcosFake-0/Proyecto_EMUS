@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Proyecto_EMUS.Data.Repository.Interfaces;
 
-namespace Proyecto_EMUS.Controllers
+namespace Proyecto_EMUS.Areas.Medicine.Controllers
 {
     public class HomeController : Controller
     {
@@ -10,6 +10,6 @@ namespace Proyecto_EMUS.Controllers
             return View();
         }
 
-     
+
     }
 }
