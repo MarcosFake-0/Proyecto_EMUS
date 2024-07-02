@@ -6,17 +6,20 @@ namespace Proyecto_EMUS.Models
 {
     public class DoctorSpecialty
     {
-        [ForeignKey("Doctor")]
+
         [Key]
         [Required]
         public int GMCNumber { get; set; }
+
+        [ForeignKey("GMCNumber")]
         public Doctor Doctor { get; set; }
 
-        [ForeignKey("Specialty")]
+
         [Key]
         [Required]
         public int IdSpecialty { get; set; }
 
+        [ForeignKey("IdSpecialty")]
         public Specialty Specialty { get; set; }
     }
 }
