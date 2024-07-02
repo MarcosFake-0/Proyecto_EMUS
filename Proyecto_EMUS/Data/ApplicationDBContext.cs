@@ -17,5 +17,7 @@ namespace Proyecto_EMUS.Data
         public DbSet<Patient> Patient { get; set; }
 
         public DbSet<Specialty> Specialty { get; set; }
+
+        public DbSet<DoctorSpecialty> DoctorSpecialty { get; set; }
     }
 }
