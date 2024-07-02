@@ -9,7 +9,7 @@ namespace Proyecto_EMUS.Models
         public int Id { get; set; }
 
         [Required]
-        public DateTime DayOfBirth { get; set; }
+        public DateOnly DayOfBirth { get; set; }
 
         [Required]
         [MaxLength(50)]
@@ -17,7 +17,7 @@ namespace Proyecto_EMUS.Models
 
         [Required]
         [MaxLength(50)]
-        public string FistName { get; set; }
+        public string FirstName { get; set; }
 
         [Required]
         [MaxLength(50)]

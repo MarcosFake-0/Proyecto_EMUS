@@ -95,7 +95,7 @@ namespace Proyecto_EMUS.Data.Migrations
                     b.Property<DateTime>("DayOfBirth")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("FistName")
+                    b.Property<string>("FirstName")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");

@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Proyecto_EMUS.Data.Repository.Interfaces;
 
-namespace Proyecto_EMUS.Controllers
+namespace Proyecto_EMUS.Areas.Admin.Controllers
 {
-    public class PatientController : Controller
+    public class DoctorController : Controller
     {
         private IUnitOfWork _unitOfWork;
-        public PatientController(IUnitOfWork unitOfWork)
+        public DoctorController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }

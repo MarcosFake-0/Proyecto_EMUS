@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Proyecto_EMUS.Data.Repository.Interfaces;
 
-namespace Proyecto_EMUS.Controllers
+namespace Proyecto_EMUS.Areas.Admin.Controllers
 {
-    public class ConditionsController : Controller
+    public class SpecialtyController : Controller
     {
         private IUnitOfWork _unitOfWork;
-        public ConditionsController(IUnitOfWork unitOfWork) { 
+        public SpecialtyController(IUnitOfWork unitOfWork)
+        {
             _unitOfWork = unitOfWork;
         }
         public IActionResult Index()
