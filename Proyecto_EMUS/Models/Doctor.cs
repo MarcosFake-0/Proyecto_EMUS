@@ -6,7 +6,7 @@ namespace Proyecto_EMUS.Models
     public class Doctor
     {
         [Key]
-        public int GMCNumer { get; set; }
+        public int GMCNumber { get; set; }
 
         [Required]
         [MaxLength(50)]
@@ -22,8 +22,5 @@ namespace Proyecto_EMUS.Models
 
         [Required]
         public string UrlImage { get; set; }
-
-        public List<Specialty> Specialties { get; set; }
-
     }
 }

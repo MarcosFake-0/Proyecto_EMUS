@@ -76,7 +76,7 @@ namespace Proyecto_EMUS.Data.Migrations
                         name: "FK_Specialty_Doctor_DoctorId",
                         column: x => x.DoctorId,
                         principalTable: "Doctor",
-                        principalColumn: "GMCNumer");
+                        principalColumn: "GMCNumber");
                 });
 
             migrationBuilder.CreateIndex(
