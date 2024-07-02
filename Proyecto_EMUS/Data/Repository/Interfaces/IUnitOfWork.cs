@@ -7,6 +7,11 @@
         IPatientRepository Patient { get; }
         ISpecialtyRepository Specialty { get; }
         ITreatmentRepository Treatment { get; }
+        IDoctorSpecialtyRepository DoctorSpecialty { get; }
+        IDrugRepository Drug { get; }
+        IClinicalHistoryRepository ClinicalHistory { get; }
+        IClinicalHistoryNoteRepository ClinicalHistoryNote { get; }
+        ILaboratoryExamRepository LaboratoryExam { get; }
 
         void Save();
     }

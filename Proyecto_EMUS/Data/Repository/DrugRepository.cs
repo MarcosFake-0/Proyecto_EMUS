@@ -3,19 +3,18 @@ using Proyecto_EMUS.Models;
 
 namespace Proyecto_EMUS.Data.Repository
 {
-    public class DoctorRepository : Repository<Doctor>, IDoctorRepository
+    public class DrugRepository : Repository<Drug>, IDrugRepository
     {
         private ApplicationDBContext _db;
 
-        public DoctorRepository(ApplicationDBContext db) : base(db)
+        public DrugRepository(ApplicationDBContext db) : base(db)
         {
             _db = db;
         }
 
-        public void Update(Doctor doctor)
+        public void Update(Drug drug)
         {
-            _db.Doctor.Update(doctor);
+            _db.Drugs.Update(drug);
         }
-    
     }
 }
