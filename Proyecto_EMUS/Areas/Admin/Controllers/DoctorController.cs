@@ -25,18 +25,18 @@ namespace Proyecto_EMUS.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public IActionResult Upsert(int? Id)
+        public IActionResult Upsert(int? id)
         {
             DoctorVM doctorVM = new DoctorVM();
 
-            if (Id == null || Id == 0)
+            if (id == null || id == 0)
             {
                 doctorVM.Doctor = new Doctor();
                 doctorVM.Specialties = new List<Specialty>();
                 return View(doctorVM);
             }
 
-            doctorVM.Doctor = _unitOfWork.Doctor.Get(x => x.GMCNumber == Id);
+            doctorVM.Doctor = _unitOfWork.Doctor.Get(x => x.GMCNumber == id);
 
             if (doctorVM.Doctor == null)
             {
@@ -62,7 +62,7 @@ namespace Proyecto_EMUS.Areas.Admin.Controllers
                     string extension = Path.GetExtension(file.FileName);
                     var uploads = Path.Combine(wwwRootPath, @"images\doctors");
 
-                    if (doctorVM.Doctor.UrlImage != null)// Update
+                    if (doctorVM.Doctor.UrlImage != null)
                     {
                         var oldImageUrl = Path.Combine(wwwRootPath, doctorVM.Doctor.UrlImage);
 
@@ -104,6 +104,7 @@ namespace Proyecto_EMUS.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
 
+        //PENDIENTE: VALIDAR SI EN LA VISTA SE PUEDE ENRUTAR A ESTAS ACCIONES CON GMCNUMBER Y IDSPECIALTY Y NO CON id 
 
         [HttpDelete]
         public IActionResult DeleteSpecialty(int? GMCNumber, int IdSpecialty)

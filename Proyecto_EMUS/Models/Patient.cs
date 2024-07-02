@@ -25,8 +25,10 @@ namespace Proyecto_EMUS.Models
         [Required]
         public string CivilStatus { get; set; }
 
-        [ForeignKey("Doctor")]
         public int AttendingDoctor { get; set; }
+
+        [ForeignKey("AttendingDoctor")]
+        public Doctor Doctor { get; set; }
 
         [DataType(DataType.Date)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]

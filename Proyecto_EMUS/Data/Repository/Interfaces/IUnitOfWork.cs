@@ -12,7 +12,7 @@
         IClinicalHistoryRepository ClinicalHistory { get; }
         IClinicalHistoryNoteRepository ClinicalHistoryNote { get; }
         ILaboratoryExamRepository LaboratoryExam { get; }
-
+        IMedicationRepository Medication { get; }
         void Save();
     }
 }

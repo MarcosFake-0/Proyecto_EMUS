@@ -29,5 +29,7 @@ namespace Proyecto_EMUS.Data
         public DbSet<Drug> Drugs { get; set; }
 
         public DbSet<LaboratoryExam> LaboratoryExams { get; set; }
+
+        public DbSet<Medication> Medications { get; set; }
     }
 }
