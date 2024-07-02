@@ -27,11 +27,11 @@ namespace Proyecto_EMUS.Data.Migrations
 
             modelBuilder.Entity("Proyecto_EMUS.Models.Conditions", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("GMCNumer")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GMCNumer"));
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -43,18 +43,18 @@ namespace Proyecto_EMUS.Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.HasKey("Id");
+                    b.HasKey("GMCNumer");
 
                     b.ToTable("Conditions");
                 });
 
             modelBuilder.Entity("Proyecto_EMUS.Models.Doctor", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("GMCNumer")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GMCNumer"));
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -75,18 +75,18 @@ namespace Proyecto_EMUS.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("GMCNumer");
 
                     b.ToTable("Doctor");
                 });
 
             modelBuilder.Entity("Proyecto_EMUS.Models.Patient", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("GMCNumer")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GMCNumer"));
 
                     b.Property<int>("AttendingDoctor")
                         .HasColumnType("int");
@@ -116,18 +116,18 @@ namespace Proyecto_EMUS.Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.HasKey("Id");
+                    b.HasKey("GMCNumer");
 
                     b.ToTable("Patient");
                 });
 
             modelBuilder.Entity("Proyecto_EMUS.Models.Specialty", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("GMCNumer")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GMCNumer"));
 
                     b.Property<int?>("DoctorId")
                         .HasColumnType("int");
@@ -137,7 +137,7 @@ namespace Proyecto_EMUS.Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.HasKey("Id");
+                    b.HasKey("GMCNumer");
 
                     b.HasIndex("DoctorId");
 

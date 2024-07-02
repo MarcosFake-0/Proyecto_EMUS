@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Proyecto_EMUS", "Proyecto_EMUS\Proyecto_EMUS.csproj", "{D5B52BD1-EA2F-49AC-A714-F5001576CF6B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Proyecto_EMUS", "Proyecto_EMUS\Proyecto_EMUS.csproj", "{D5B52BD1-EA2F-49AC-A714-F5001576CF6B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarDealer", "..\CarDealer\CarDealer.csproj", "{7513BA35-31D2-4D0C-B23B-4FF801C6BD50}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{D5B52BD1-EA2F-49AC-A714-F5001576CF6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D5B52BD1-EA2F-49AC-A714-F5001576CF6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D5B52BD1-EA2F-49AC-A714-F5001576CF6B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7513BA35-31D2-4D0C-B23B-4FF801C6BD50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7513BA35-31D2-4D0C-B23B-4FF801C6BD50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7513BA35-31D2-4D0C-B23B-4FF801C6BD50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7513BA35-31D2-4D0C-B23B-4FF801C6BD50}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
