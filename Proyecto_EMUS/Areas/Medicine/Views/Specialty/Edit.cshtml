@@ -1,0 +1,22 @@
+﻿@model Evento
+
+<form method="post">
+    <div>
+        <div>
+            <h2 class="text-info">Editar Especialidad</h2>
+        </div>
+
+
+        <div>
+            <label asp-for="Name" class="p-0"></label>
+            <input asp-for="Name" type="text" class="form-control" />
+
+        </div>
+        <div>
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+
+       
+
+</form>

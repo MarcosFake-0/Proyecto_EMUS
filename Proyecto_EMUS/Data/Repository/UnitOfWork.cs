@@ -15,7 +15,7 @@ namespace Proyecto_EMUS.Data.Repository
             Doctor = new DoctorRepository(_applicationDB);
             Patient = new PatientRepository(_applicationDB);
             Specialty = new SpecialtyRepository(_applicationDB);
-            DoctorSpecialty = new DoctorSpecialtyRepository(_applicationDB);
+            Treatment = new TreatmentRepository(_applicationDB);
         }
 
         public IConditionsRepository Conditions { get; private set; }
@@ -23,6 +23,8 @@ namespace Proyecto_EMUS.Data.Repository
         public IPatientRepository Patient { get; private set; }
         public ISpecialtyRepository Specialty { get; private set; }
         public IDoctorSpecialtyRepository DoctorSpecialty { get; private set; }
+
+        public ITreatmentRepository Treatment { get; private set; }
 
         public void Save()
         {

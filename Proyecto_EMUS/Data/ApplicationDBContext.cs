@@ -18,6 +18,6 @@ namespace Proyecto_EMUS.Data
 
         public DbSet<Specialty> Specialty { get; set; }
 
-        public DbSet<DoctorSpecialty> DoctorSpecialty { get; set; }
+        public DbSet<Treatment> Treatment { get; set; }
     }
 }
