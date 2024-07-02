@@ -6,7 +6,8 @@
         IDoctorRepository Doctor { get; }
         IPatientRepository Patient { get; }
         ISpecialtyRepository Specialty { get; }
-        
+        ITreatmentRepository Treatment { get; }
+
         void Save();
     }
 }
