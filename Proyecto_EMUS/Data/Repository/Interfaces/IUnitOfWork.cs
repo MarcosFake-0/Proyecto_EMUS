@@ -15,8 +15,8 @@
         IMedicationRepository Medication { get; }
         IPatientTreatmentRepository PatientTreatment { get; }
         IPatientMedicationRepository PatientMedication { get; }
-
         IPatientConditionRepository PatientCondition { get; }
+        IPatientLaboratoryExamRepository PatientLaboratoryExam { get; }
         void Save();
     }
 }

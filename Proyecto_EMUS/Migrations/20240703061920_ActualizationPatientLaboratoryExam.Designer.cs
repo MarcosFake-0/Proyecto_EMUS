@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Proyecto_EMUS.Data;
 
@@ -11,9 +12,11 @@ using Proyecto_EMUS.Data;
 namespace Proyecto_EMUS.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240703061920_ActualizationPatientLaboratoryExam")]
+    partial class ActualizationPatientLaboratoryExam
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,7 +40,7 @@ namespace Proyecto_EMUS.Migrations
 
                     b.HasIndex("PatientId");
 
-                    b.ToTable("ClinicalHistories", (string)null);
+                    b.ToTable("ClinicalHistories");
                 });
 
             modelBuilder.Entity("Proyecto_EMUS.Models.ClinicalHistoryNote", b =>
@@ -48,9 +51,6 @@ namespace Proyecto_EMUS.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ClinicalHistoryId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("datetime2");
 
@@ -59,8 +59,6 @@ namespace Proyecto_EMUS.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ClinicalHistoryId");
 
                     b.ToTable("ClinicalHistoryNotes");
                 });
@@ -85,7 +83,7 @@ namespace Proyecto_EMUS.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Conditions", (string)null);
+                    b.ToTable("Conditions");
                 });
 
             modelBuilder.Entity("Proyecto_EMUS.Models.Doctor", b =>
@@ -117,7 +115,7 @@ namespace Proyecto_EMUS.Migrations
 
                     b.HasKey("GMCNumber");
 
-                    b.ToTable("Doctor", (string)null);
+                    b.ToTable("Doctor");
                 });
 
             modelBuilder.Entity("Proyecto_EMUS.Models.DoctorSpecialty", b =>
@@ -134,7 +132,7 @@ namespace Proyecto_EMUS.Migrations
 
                     b.HasIndex("IdSpecialty");
 
-                    b.ToTable("DoctorSpecialty", (string)null);
+                    b.ToTable("DoctorSpecialty");
                 });
 
             modelBuilder.Entity("Proyecto_EMUS.Models.Drug", b =>
@@ -151,7 +149,7 @@ namespace Proyecto_EMUS.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Drugs", (string)null);
+                    b.ToTable("Drugs");
                 });
 
             modelBuilder.Entity("Proyecto_EMUS.Models.LaboratoryExam", b =>
@@ -171,7 +169,7 @@ namespace Proyecto_EMUS.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("LaboratoryExams", (string)null);
+                    b.ToTable("LaboratoryExams");
                 });
 
             modelBuilder.Entity("Proyecto_EMUS.Models.Medication", b =>
@@ -188,7 +186,7 @@ namespace Proyecto_EMUS.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Medications", (string)null);
+                    b.ToTable("Medications");
                 });
 
             modelBuilder.Entity("Proyecto_EMUS.Models.Patient", b =>
@@ -226,7 +224,7 @@ namespace Proyecto_EMUS.Migrations
 
                     b.HasIndex("AttendingDoctor");
 
-                    b.ToTable("Patient", (string)null);
+                    b.ToTable("Patient");
                 });
 
             modelBuilder.Entity("Proyecto_EMUS.Models.PatientCondition", b =>
@@ -243,34 +241,25 @@ namespace Proyecto_EMUS.Migrations
 
                     b.HasIndex("IdCondition");
 
-                    b.ToTable("PatientConditions", (string)null);
+                    b.ToTable("PatientConditions");
                 });
 
             modelBuilder.Entity("Proyecto_EMUS.Models.PatientLaboratoryExam", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<int>("IdPatient")
+                        .HasColumnType("int")
+                        .HasColumnOrder(0);
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("ExamDate")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("IdLaboratoryExam")
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
 
                     b.Property<string>("FileUrl")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("IdLaboratoryExam")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdPatient")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
+                    b.HasKey("IdPatient", "IdLaboratoryExam");
 
                     b.HasIndex("IdLaboratoryExam");
-
-                    b.HasIndex("IdPatient");
 
                     b.ToTable("PatientLaboratoryExam");
                 });
@@ -289,7 +278,7 @@ namespace Proyecto_EMUS.Migrations
 
                     b.HasIndex("IdMedication");
 
-                    b.ToTable("PatientMedication", (string)null);
+                    b.ToTable("PatientMedication");
                 });
 
             modelBuilder.Entity("Proyecto_EMUS.Models.PatientTreatment", b =>
@@ -306,7 +295,7 @@ namespace Proyecto_EMUS.Migrations
 
                     b.HasIndex("IdTreatment");
 
-                    b.ToTable("PatientTreatment", (string)null);
+                    b.ToTable("PatientTreatment");
                 });
 
             modelBuilder.Entity("Proyecto_EMUS.Models.Specialty", b =>
@@ -324,7 +313,7 @@ namespace Proyecto_EMUS.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Specialty", (string)null);
+                    b.ToTable("Specialty");
                 });
 
             modelBuilder.Entity("Proyecto_EMUS.Models.Treatment", b =>
@@ -345,7 +334,7 @@ namespace Proyecto_EMUS.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Treatment", (string)null);
+                    b.ToTable("Treatment");
                 });
 
             modelBuilder.Entity("Proyecto_EMUS.Models.ClinicalHistory", b =>
@@ -357,17 +346,6 @@ namespace Proyecto_EMUS.Migrations
                         .IsRequired();
 
                     b.Navigation("Patient");
-                });
-
-            modelBuilder.Entity("Proyecto_EMUS.Models.ClinicalHistoryNote", b =>
-                {
-                    b.HasOne("Proyecto_EMUS.Models.ClinicalHistory", "ClinicalHistory")
-                        .WithMany("ClinicalHistoryNotes")
-                        .HasForeignKey("ClinicalHistoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ClinicalHistory");
                 });
 
             modelBuilder.Entity("Proyecto_EMUS.Models.DoctorSpecialty", b =>
@@ -474,11 +452,6 @@ namespace Proyecto_EMUS.Migrations
                     b.Navigation("Patient");
 
                     b.Navigation("Treatment");
-                });
-
-            modelBuilder.Entity("Proyecto_EMUS.Models.ClinicalHistory", b =>
-                {
-                    b.Navigation("ClinicalHistoryNotes");
                 });
 
             modelBuilder.Entity("Proyecto_EMUS.Models.Doctor", b =>

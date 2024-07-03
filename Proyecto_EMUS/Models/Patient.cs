@@ -5,15 +5,12 @@ namespace Proyecto_EMUS.Models
 {
     public class Patient
     {
+
         [Key]
         public int Id { get; set; }
 
         [Required]
         public DateOnly DayOfBirth { get; set; }
-
-        [Required]
-        [MaxLength(50)]
-        public string Name { get; set; }
 
         [Required]
         [MaxLength(50)]
@@ -37,6 +34,6 @@ namespace Proyecto_EMUS.Models
         public ICollection<PatientCondition> PatientConditions { get; set; }
         public ICollection<PatientMedication> PatientMedication { get; set;}
         public ICollection<PatientTreatment> PatientTreatments { get; set;}
-        
+        public ICollection<PatientLaboratoryExam> PatientLaboratoryExams { get; set; }
     }
 }
