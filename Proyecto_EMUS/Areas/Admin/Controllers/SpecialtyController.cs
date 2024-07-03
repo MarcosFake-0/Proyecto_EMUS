@@ -4,6 +4,7 @@ using Proyecto_EMUS.Models;
 
 namespace Proyecto_EMUS.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class SpecialtyController : Controller
     {
 

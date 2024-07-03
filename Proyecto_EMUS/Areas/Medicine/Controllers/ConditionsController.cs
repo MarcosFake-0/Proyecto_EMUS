@@ -4,6 +4,7 @@ using Proyecto_EMUS.Models;
 
 namespace Proyecto_EMUS.Areas.Medicine.Controllers
 {
+    [Area("Medicine")]
     public class ConditionsController : Controller
     {
         private IUnitOfWork _unitOfWork;
