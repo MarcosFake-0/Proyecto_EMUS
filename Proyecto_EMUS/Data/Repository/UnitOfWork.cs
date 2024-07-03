@@ -22,6 +22,9 @@ namespace Proyecto_EMUS.Data.Repository
             ClinicalHistoryNote = new ClinicalHistoryNoteRepository(_db);
             LaboratoryExam = new LaboratoryExamRepository(_db);
             Medication = new MedicationRepository(_db);
+            PatientTreatment = new PatientTreatmentRepository(_db);
+            PatientMedication = new PatientMedicationRepository(_db);
+            PatientCondition = new PatientConditionRepository(_db);
         }
 
 
@@ -36,6 +39,12 @@ namespace Proyecto_EMUS.Data.Repository
         public IClinicalHistoryNoteRepository ClinicalHistoryNote { get; private set; }
         public ILaboratoryExamRepository LaboratoryExam { get; private set; }
         public IMedicationRepository Medication { get; private set; }
+        public IPatientTreatmentRepository PatientTreatment { get; private set; }
+
+        public IPatientMedicationRepository PatientMedication { get; private set; }
+
+        public IPatientConditionRepository PatientCondition { get; private set; }
+
         public void Save()
         {
             _db.SaveChanges();

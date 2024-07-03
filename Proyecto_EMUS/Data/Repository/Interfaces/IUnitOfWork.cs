@@ -13,6 +13,10 @@
         IClinicalHistoryNoteRepository ClinicalHistoryNote { get; }
         ILaboratoryExamRepository LaboratoryExam { get; }
         IMedicationRepository Medication { get; }
+        IPatientTreatmentRepository PatientTreatment { get; }
+        IPatientMedicationRepository PatientMedication { get; }
+
+        IPatientConditionRepository PatientCondition { get; }
         void Save();
     }
 }
