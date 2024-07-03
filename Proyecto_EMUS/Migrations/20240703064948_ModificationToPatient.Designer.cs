@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Proyecto_EMUS.Data;
 
@@ -11,9 +12,11 @@ using Proyecto_EMUS.Data;
 namespace Proyecto_EMUS.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240703064948_ModificationToPatient")]
+    partial class ModificationToPatient
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,9 +51,6 @@ namespace Proyecto_EMUS.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ClinicalHistoryId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("datetime2");
 
@@ -59,8 +59,6 @@ namespace Proyecto_EMUS.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ClinicalHistoryId");
 
                     b.ToTable("ClinicalHistoryNotes");
                 });
@@ -214,6 +212,11 @@ namespace Proyecto_EMUS.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<string>("IdPatient")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
                     b.Property<DateTime>("LastAttendDate")
                         .HasColumnType("datetime2");
 
@@ -359,17 +362,6 @@ namespace Proyecto_EMUS.Migrations
                     b.Navigation("Patient");
                 });
 
-            modelBuilder.Entity("Proyecto_EMUS.Models.ClinicalHistoryNote", b =>
-                {
-                    b.HasOne("Proyecto_EMUS.Models.ClinicalHistory", "ClinicalHistory")
-                        .WithMany("ClinicalHistoryNotes")
-                        .HasForeignKey("ClinicalHistoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ClinicalHistory");
-                });
-
             modelBuilder.Entity("Proyecto_EMUS.Models.DoctorSpecialty", b =>
                 {
                     b.HasOne("Proyecto_EMUS.Models.Doctor", "Doctor")
@@ -474,11 +466,6 @@ namespace Proyecto_EMUS.Migrations
                     b.Navigation("Patient");
 
                     b.Navigation("Treatment");
-                });
-
-            modelBuilder.Entity("Proyecto_EMUS.Models.ClinicalHistory", b =>
-                {
-                    b.Navigation("ClinicalHistoryNotes");
                 });
 
             modelBuilder.Entity("Proyecto_EMUS.Models.Doctor", b =>

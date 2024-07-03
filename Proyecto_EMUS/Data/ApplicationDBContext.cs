@@ -36,10 +36,21 @@ namespace Proyecto_EMUS.Data
 
         public DbSet<PatientMedication> PatientMedication { get; set; }
         public DbSet<PatientTreatment> PatientTreatment { get; set; }
+        public DbSet<PatientLaboratoryExam> PatientLaboratoryExam { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //ClinicalHistoryNotes
+            modelBuilder.Entity<ClinicalHistoryNote>()
+            .HasKey(pt => pt.Id);
+
+            modelBuilder.Entity<ClinicalHistoryNote>()
+                .HasOne(pt => pt.ClinicalHistory)
+                .WithMany(p => p.ClinicalHistoryNotes)
+                .HasForeignKey(pt => pt.ClinicalHistoryId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             //PatientTreatment
             modelBuilder.Entity<PatientTreatment>()
                 .HasKey(pt => new { pt.IdPatient, pt.IdTreatment });
@@ -52,7 +63,7 @@ namespace Proyecto_EMUS.Data
 
             modelBuilder.Entity<PatientTreatment>()
                 .HasOne(pt => pt.Treatment)
-                .WithMany(t => t.PatientTreatments)
+                .WithMany()
                 .HasForeignKey(pt => pt.IdTreatment)
                 .OnDelete(DeleteBehavior.Cascade); 
 
@@ -68,7 +79,7 @@ namespace Proyecto_EMUS.Data
 
             modelBuilder.Entity<PatientMedication>()
                 .HasOne(pm => pm.Medication)
-                .WithMany(p => p.PatientMedication)
+                .WithMany()
                 .HasForeignKey(pm => pm.IdMedication)
                 .OnDelete(DeleteBehavior.Cascade); 
 
@@ -84,9 +95,25 @@ namespace Proyecto_EMUS.Data
 
             modelBuilder.Entity<PatientCondition>()
                 .HasOne(pc => pc.Conditions)
-                .WithMany(p => p.PatientConditions)
+                .WithMany()
                 .HasForeignKey(pc => pc.IdCondition)
-                .OnDelete(DeleteBehavior.Cascade); 
+                .OnDelete(DeleteBehavior.Cascade);
+
+            //PatientLaboratoryExam
+            modelBuilder.Entity<PatientLaboratoryExam>()
+                .HasKey(pl => pl.Id);
+
+            modelBuilder.Entity<PatientLaboratoryExam>()
+                .HasOne(pl => pl.Patient)
+                .WithMany(p => p.PatientLaboratoryExams)
+                .HasForeignKey(pl => pl.IdPatient)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<PatientLaboratoryExam>()
+                .HasOne(pl => pl.LaboratoryExam)
+                .WithMany()
+                .HasForeignKey(pl => pl.IdLaboratoryExam)
+                .OnDelete(DeleteBehavior.Cascade);
 
             //DoctorSpecialty
             modelBuilder.Entity<DoctorSpecialty>()
@@ -100,7 +127,7 @@ namespace Proyecto_EMUS.Data
 
             modelBuilder.Entity<DoctorSpecialty>()
                 .HasOne(ds => ds.Specialty)
-                .WithMany(s => s.DoctorSpecialties)
+                .WithMany()
                 .HasForeignKey(ds => ds.IdSpecialty)
                 .OnDelete(DeleteBehavior.Cascade); 
 
