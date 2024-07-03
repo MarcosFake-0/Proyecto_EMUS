@@ -38,6 +38,10 @@ namespace Proyecto_EMUS.Data
         public DbSet<PatientLaboratoryExam> PatientLaboratoryExam { get; set; }
 
 
+        // Recuerde hacer la migración antes de nada <==================!!!!!!!!!!!!!!!!!
+        public DbSet<ApplicationUser> ApplicationUser { get; set; }
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //Doctor
