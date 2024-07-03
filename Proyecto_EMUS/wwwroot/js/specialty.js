@@ -15,7 +15,7 @@ function loadDataTable() {
                 "data": "id",
                 "render": function (data) {
                     return `
-                            <a href="/Admin/Specialty/edit/${data}" class="btn btn-primary mx-2">
+                            <a href="/Admin/Specialty/upsert/${data}" class="btn btn-primary mx-2">
                                 <i class="bi bi-pencil-square"></i> Edit
                             </a>
 
