@@ -33,6 +33,10 @@ namespace Proyecto_EMUS.Models
         [DataType(DataType.Date)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime LastAttendDate { get; set; }
+
+        public ICollection<PatientCondition> PatientConditions { get; set; }
+        public ICollection<PatientMedication> PatientMedication { get; set;}
+        public ICollection<PatientTreatment> PatientTreatments { get; set;}
         
     }
 }

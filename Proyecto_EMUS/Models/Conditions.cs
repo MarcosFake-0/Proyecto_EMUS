@@ -12,5 +12,7 @@ namespace Proyecto_EMUS.Models
         [Required]
         [StringLength(50)]
         public string Description { get; set; }
+
+        public ICollection<PatientCondition> PatientConditions { get; set; }
     }
 }

@@ -5,6 +5,10 @@ VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Proyecto_EMUS", "Proyecto_EMUS\Proyecto_EMUS.csproj", "{D5B52BD1-EA2F-49AC-A714-F5001576CF6B}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthClinicMVCProject", "..\HealthClinicMVC\HealthClinicMVCProject\HealthClinicMVCProject.csproj", "{AD624AA8-1F6F-4808-B72E-2AE589D312DD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarDealer", "..\CarDealer\CarDealer.csproj", "{ECCCE3E0-E34E-4B38-B0F9-9C104E799B3C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{D5B52BD1-EA2F-49AC-A714-F5001576CF6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D5B52BD1-EA2F-49AC-A714-F5001576CF6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D5B52BD1-EA2F-49AC-A714-F5001576CF6B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD624AA8-1F6F-4808-B72E-2AE589D312DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD624AA8-1F6F-4808-B72E-2AE589D312DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD624AA8-1F6F-4808-B72E-2AE589D312DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD624AA8-1F6F-4808-B72E-2AE589D312DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECCCE3E0-E34E-4B38-B0F9-9C104E799B3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECCCE3E0-E34E-4B38-B0F9-9C104E799B3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECCCE3E0-E34E-4B38-B0F9-9C104E799B3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECCCE3E0-E34E-4B38-B0F9-9C104E799B3C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

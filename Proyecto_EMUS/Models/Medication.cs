@@ -9,5 +9,7 @@ namespace Proyecto_EMUS.Models
 
         [Required]
         public string Description { get; set; }
+
+        public ICollection<PatientMedication> PatientMedication { get; set;}
     }
 }

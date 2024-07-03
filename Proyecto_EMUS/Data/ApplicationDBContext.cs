@@ -31,5 +31,81 @@ namespace Proyecto_EMUS.Data
         public DbSet<LaboratoryExam> LaboratoryExams { get; set; }
 
         public DbSet<Medication> Medications { get; set; }
+
+        public DbSet<PatientCondition> PatientConditions { get; set; }
+
+        public DbSet<PatientMedication> PatientMedication { get; set; }
+        public DbSet<PatientTreatment> PatientTreatment { get; set; }
+
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            //PatientTreatment
+            modelBuilder.Entity<PatientTreatment>()
+                .HasKey(pt => new { pt.IdPatient, pt.IdTreatment });
+
+            modelBuilder.Entity<PatientTreatment>()
+                .HasOne(pt => pt.Patient)
+                .WithMany(p => p.PatientTreatments)
+                .HasForeignKey(pt => pt.IdPatient)
+                .OnDelete(DeleteBehavior.Cascade); 
+
+            modelBuilder.Entity<PatientTreatment>()
+                .HasOne(pt => pt.Treatment)
+                .WithMany(t => t.PatientTreatments)
+                .HasForeignKey(pt => pt.IdTreatment)
+                .OnDelete(DeleteBehavior.Cascade); 
+
+            //PatientMedication
+            modelBuilder.Entity<PatientMedication>()
+                .HasKey(pm => new { pm.IdPatient, pm.IdMedication });
+
+            modelBuilder.Entity<PatientMedication>()
+                .HasOne(pm => pm.Patient)
+                .WithMany(p => p.PatientMedication)
+                .HasForeignKey(pm => pm.IdPatient)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<PatientMedication>()
+                .HasOne(pm => pm.Medication)
+                .WithMany(p => p.PatientMedication)
+                .HasForeignKey(pm => pm.IdMedication)
+                .OnDelete(DeleteBehavior.Cascade); 
+
+            //PatientCondition
+            modelBuilder.Entity<PatientCondition>()
+                .HasKey(pc => new { pc.IdPatient, pc.IdCondition });
+
+            modelBuilder.Entity<PatientCondition>()
+                .HasOne(pc => pc.Patient)
+                .WithMany(p => p.PatientConditions)
+                .HasForeignKey(pc => pc.IdPatient)
+                .OnDelete(DeleteBehavior.Cascade); 
+
+            modelBuilder.Entity<PatientCondition>()
+                .HasOne(pc => pc.Conditions)
+                .WithMany(p => p.PatientConditions)
+                .HasForeignKey(pc => pc.IdCondition)
+                .OnDelete(DeleteBehavior.Cascade); 
+
+            //DoctorSpecialty
+            modelBuilder.Entity<DoctorSpecialty>()
+                .HasKey(ds => new { ds.GMCNumber, ds.IdSpecialty });
+
+            modelBuilder.Entity<DoctorSpecialty>()
+                .HasOne(ds => ds.Doctor)
+                .WithMany(d => d.DoctorSpecialties)
+                .HasForeignKey(ds => ds.GMCNumber)
+                .OnDelete(DeleteBehavior.Cascade); 
+
+            modelBuilder.Entity<DoctorSpecialty>()
+                .HasOne(ds => ds.Specialty)
+                .WithMany(s => s.DoctorSpecialties)
+                .HasForeignKey(ds => ds.IdSpecialty)
+                .OnDelete(DeleteBehavior.Cascade); 
+
+            base.OnModelCreating(modelBuilder);
+        }
+
     }
 }

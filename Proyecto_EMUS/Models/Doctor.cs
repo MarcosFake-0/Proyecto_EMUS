@@ -22,5 +22,7 @@ namespace Proyecto_EMUS.Models
 
         [Required]
         public string UrlImage { get; set; }
+
+        public ICollection<DoctorSpecialty> DoctorSpecialties { get; set; }
     }
 }

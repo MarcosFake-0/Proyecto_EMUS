@@ -3,21 +3,23 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Proyecto_EMUS.Models
 {
-    public class PacientMedication
+    public class PatientTreatment
     {
+
         [Key]
-        [Required]
+        [Column(Order = 0)]
         public int IdPatient { get; set; }
 
         [ForeignKey("IdPatient")]
         public Patient Patient { get; set; }
 
-        [Key]
-        [Required]
-        public int IdMedication { get; set; }
 
-        [ForeignKey("IdMedication")]
-        public Medication Medication { get; set; }
+        [Key]
+        [Column(Order = 1)]
+        public int IdTreatment { get; set; }
+
+        [ForeignKey("IdTreatment")]
+        public Treatment Treatment { get; set; }
 
     }
 }

@@ -8,7 +8,7 @@ namespace Proyecto_EMUS.Models
     {
 
         [Key]
-        [Required]
+        [Column(Order =0)]
         public int GMCNumber { get; set; }
 
         [ForeignKey("GMCNumber")]
@@ -16,7 +16,7 @@ namespace Proyecto_EMUS.Models
 
 
         [Key]
-        [Required]
+        [Column(Order =1)]
         public int IdSpecialty { get; set; }
 
         [ForeignKey("IdSpecialty")]
