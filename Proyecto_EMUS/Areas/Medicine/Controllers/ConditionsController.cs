@@ -16,109 +16,68 @@ namespace Proyecto_EMUS.Areas.Medicine.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            List<Conditions> listcondition = _unitOfWork.Conditions.GetAll().ToList();
-            return View(listcondition);
-        }
-
-
-        [HttpGet]
-        public IActionResult Create()
-        {
-
-
             return View();
         }
 
-        [HttpPost]
+        [HttpGet]
+        public IActionResult Upsert(int? id)
+        {
+            Conditions conditions = new Conditions();
+            if (id == null || id <= 0)
+                return View(conditions);
 
-        public IActionResult Create(Conditions condition)
+            conditions = _unitOfWork.Conditions.Get(x => x.Id == id);
+            return View(conditions);
+
+        }
+
+        [HttpPost]
+        public IActionResult Upsert(Conditions conditions)
         {
             if (ModelState.IsValid)
             {
-                _unitOfWork.Conditions.Add(condition);
+                if (conditions.Id == 0)
+                    _unitOfWork.Conditions.Add(conditions);
+                else
+                    _unitOfWork.Conditions.Update(conditions);
+
                 _unitOfWork.Save();
-
-
-
-                return View();
+                TempData["success"] = "Condición guardada correctamente";
             }
-            TempData["success"] = "Condicion Creada";
+            else
+            {
+                TempData["error"] = "Error al guardar";
+            }
             return RedirectToAction("Index");
-
-
-
         }
 
 
 
-        [HttpPost]
-        public IActionResult Edit(Conditions condition)
-        {
-            if (ModelState.IsValid)
-            {
-                _unitOfWork.Conditions.Update(condition);
-                _unitOfWork.Save();
-
-
-
-                return RedirectToAction("Index");
-            }
-            TempData["success"] = "Condicion Actualizada";
-            return View();
-
-        }
-
-
+        #region API
         [HttpGet]
-        public IActionResult Edit(int? id)
+        public IActionResult GetAll()
         {
-            if (id <= 0 && id == null)
-            {
-                return NotFound();
-            }
-
-            Conditions? ConditionFromDb = _unitOfWork.Conditions.Get(x => x.Id == id);
-
-            if (ConditionFromDb == null)
-            {
-                return NotFound();
-            }
-
-            return View(ConditionFromDb);
-
+            var conditionsList = _unitOfWork.Conditions.GetAll();
+            return Json(new { data = conditionsList });
         }
 
-
-        [HttpGet]
+        [HttpDelete]
         public IActionResult Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var conditionToDelete = _unitOfWork.Conditions.Get(x => x.Id == id);
 
-            Conditions? ConditionFromDb = _unitOfWork.Conditions.Get(x => x.Id == id);
+            if (conditionToDelete == null)
+                return Json(new { success = false, message = "Error al eliminar" });
 
-            if (ConditionFromDb == null)
-            {
-                return NotFound();
-            }
+            _unitOfWork.Conditions.Remove(conditionToDelete);
+            _unitOfWork.Save();
 
-            return View(ConditionFromDb);
+            return Json(new { success = true, message = "Condición eliminada exitosamente" });
+
         }
 
-        [HttpPost]
-        public IActionResult Delete(Conditions condition)
-        {
-            if (ModelState.IsValid)
-            {
-                _unitOfWork.Conditions.Remove(condition);
-                _unitOfWork.Save();
-                TempData["success"] = "Condicion Eliminada Correctamente";
-                return RedirectToAction("Index");
-            }
-            return View();
-        }
+        #endregion
+
 
     }
 }
