@@ -23,8 +23,6 @@ namespace Proyecto_EMUS.Data
 
         public DbSet<DoctorSpecialty> DoctorSpecialty { get; set; }
 
-        public DbSet<ClinicalHistory> ClinicalHistories { get; set; }
-
         public DbSet<ClinicalHistoryNote> ClinicalHistoryNotes { get; set; }
 
         public DbSet<Drug> Drugs { get; set; }
@@ -42,14 +40,16 @@ namespace Proyecto_EMUS.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //ClinicalHistoryNotes
-            modelBuilder.Entity<ClinicalHistoryNote>()
-            .HasKey(pt => pt.Id);
+            //Doctor
+            modelBuilder.Entity<Doctor>()
+                .Property(d => d.GMCNumber)
+                .ValueGeneratedNever();
 
-            modelBuilder.Entity<ClinicalHistoryNote>()
-                .HasOne(pt => pt.ClinicalHistory)
-                .WithMany(p => p.ClinicalHistoryNotes)
-                .HasForeignKey(pt => pt.ClinicalHistoryId)
+            //ClinicalHistoryNotes
+            modelBuilder.Entity<Patient>()
+                .HasMany(p => p.ClinicalHistoryNotes)
+                .WithOne(ch => ch.Patient)
+                .HasForeignKey(ch => ch.PatientId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             //PatientTreatment

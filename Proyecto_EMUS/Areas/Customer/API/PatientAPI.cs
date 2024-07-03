@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Proyecto_EMUS.Data.Repository.Interfaces;
-using Proyecto_EMUS.Models;
-using System.Text.Json.Serialization;
-using System.Text.Json;
 
 namespace Proyecto_EMUS.Areas.Customer.API
 {
@@ -17,7 +14,7 @@ namespace Proyecto_EMUS.Areas.Customer.API
         }
 
         [HttpGet]
-        public IActionResult GetAllConditions(int? id)
+        public IActionResult GetAllConditions(string? id)
         {
             var patient = _unitOfWork.Patient.Get(x => x.Id == id, includeProperties: "PatientConditions.Conditions");
             var conditions = patient.PatientConditions.Select(x => x.Conditions);
@@ -25,7 +22,7 @@ namespace Proyecto_EMUS.Areas.Customer.API
         }
 
         [HttpGet]
-        public IActionResult GetAllTreatments(int? id)
+        public IActionResult GetAllTreatments(string? id)
         {
             var patient = _unitOfWork.Patient.Get(x => x.Id == id, includeProperties: "PatientTreatments.Treatments");
             var treatments = patient.PatientTreatments.Select(x => x.Treatment);
@@ -33,7 +30,7 @@ namespace Proyecto_EMUS.Areas.Customer.API
         }
 
         [HttpGet]
-        public IActionResult GetAllMedications(int? id)
+        public IActionResult GetAllMedications(string? id)
         {
             var patient = _unitOfWork.Patient.Get(x => x.Id == id, includeProperties: "PatientMedication.Medication");
             var medications = patient.PatientMedication.Select(x => x.Medication);
@@ -41,7 +38,7 @@ namespace Proyecto_EMUS.Areas.Customer.API
         }
 
         [HttpGet]
-        public IActionResult GetAllLaboratoryExam(int? id)
+        public IActionResult GetAllLaboratoryExam(string? id)
         {
             var patient = _unitOfWork.Patient.Get(x => x.Id == id, includeProperties: "PatientLaboratoryExams.LaboratoryExam");
             var exams = patient.PatientLaboratoryExams.Select(x => new
@@ -54,11 +51,17 @@ namespace Proyecto_EMUS.Areas.Customer.API
         }
 
         [HttpGet]
-        public IActionResult GetClinicalHistory(int? id)
+        public IActionResult GetClinicalHistory(string? id)
         {
-            var clinicalHistory = _unitOfWork.ClinicalHistory.Get(x => x.PatientId == id, includeProperties:"ClinicalHistoryNotes");
-            var clinicalHistoryNotes = clinicalHistory.ClinicalHistoryNotes.Select(x => x.Id);
-            return Json(new { data = clinicalHistoryNotes });
+            var patient = _unitOfWork.Patient.Get(x => x.Id == id, includeProperties: "ClinicalHistoryNotes");
+            var clinicalHistory = patient.ClinicalHistoryNotes.Select(note => new
+            {
+                note.Id,
+                note.Description,
+                note.DateTime
+            });
+
+            return Json(new { data = clinicalHistory });
         }
     }
 }

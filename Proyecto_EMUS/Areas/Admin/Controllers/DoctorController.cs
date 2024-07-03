@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Query;
 using Proyecto_EMUS.Data.Repository.Interfaces;
 using Proyecto_EMUS.Models;
 using Proyecto_EMUS.Models.ViewModels;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 
 namespace Proyecto_EMUS.Areas.Admin.Controllers
 {
@@ -20,8 +23,29 @@ namespace Proyecto_EMUS.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            List<Doctor> doctorList = _unitOfWork.Doctor.GetAll().ToList();
-            return View(doctorList);
+            //List<Doctor> doctorList = _unitOfWork.Doctor.GetAll(includeProperties:"DoctorSpecialty.Specialty").ToList();
+            //return View(doctorList);
+            var options = new JsonSerializerOptions
+            {
+                ReferenceHandler = ReferenceHandler.Preserve // Configurar para preservar referencias
+            };
+
+
+            var doctorList = _unitOfWork.Doctor.GetAll(includeProperties: "DoctorSpecialties.Specialty")
+                                .Select(doctor => new
+                                {
+                                    doctor.GMCNumber,
+                                    doctor.FirstName,
+                                    doctor.LastName,
+                                    doctor.UrlImage,
+                                    Specialties = doctor.DoctorSpecialties.Select(ds => new
+                                    {
+                                        ds.IdSpecialty,
+                                        ds.Specialty.Name
+                                    }).ToList()
+                                }).ToList();
+
+            return Json(new { data = doctorList });
         }
 
         [HttpGet]
@@ -127,8 +151,6 @@ namespace Proyecto_EMUS.Areas.Admin.Controllers
             Doctor doctorToDelete = _unitOfWork.Doctor.Get(x => x.GMCNumber == GMCNumber);
             if (doctorToDelete != null)
             {
-                List<DoctorSpecialty> doctorSpecialties = (List<DoctorSpecialty>)_unitOfWork.DoctorSpecialty.GetAllByDoctorGMCNumber(doctorToDelete.GMCNumber);
-                _unitOfWork.DoctorSpecialty.RemoveRange(doctorSpecialties);
                 _unitOfWork.Doctor.Remove(doctorToDelete);
                 _unitOfWork.Save();
                 TempData["success"] = "Se ha eliminado el doctor"; 

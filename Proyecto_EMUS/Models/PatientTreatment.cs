@@ -8,7 +8,7 @@ namespace Proyecto_EMUS.Models
 
         [Key]
         [Column(Order = 0)]
-        public int IdPatient { get; set; }
+        public string IdPatient { get; set; }
 
         [ForeignKey("IdPatient")]
         public Patient Patient { get; set; }

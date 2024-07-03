@@ -1,18 +1,23 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 
 namespace Proyecto_EMUS.Models
 {
     public class ClinicalHistoryNote
     {
+        [Key]
         public int Id { get; set; }
 
+        [Required]
         public string Description { get; set; }
 
+        [Required]
         public DateTime DateTime { get; set; }
 
-        public int ClinicalHistoryId { get; set; }
+        public string PatientId { get; set; }
 
-        [ForeignKey("ClinicalHistoryId")]
-        public ClinicalHistory ClinicalHistory { get; set; }
+        [ForeignKey("PatientId")]
+        public Patient Patient { get; set; }
     }
 }

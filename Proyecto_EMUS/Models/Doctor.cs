@@ -10,18 +10,13 @@ namespace Proyecto_EMUS.Models
 
         [Required]
         [MaxLength(50)]
-        public string Name { get; set; }
-
-        [Required]
-        [MaxLength(50)]
         public string FirstName { get; set; }
 
         [Required]
         [MaxLength(50)]
         public string LastName { get; set; }
 
-        [Required]
-        public string UrlImage { get; set; }
+        public string? UrlImage { get; set; }
 
         public ICollection<DoctorSpecialty> DoctorSpecialties { get; set; }
     }

@@ -37,6 +37,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Data\Migra\" />
     <Folder Include="wwwroot\images\doctors\" />
   </ItemGroup>
 
