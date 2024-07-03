@@ -25,6 +25,7 @@ namespace Proyecto_EMUS.Data.Repository
             PatientTreatment = new PatientTreatmentRepository(_db);
             PatientMedication = new PatientMedicationRepository(_db);
             PatientCondition = new PatientConditionRepository(_db);
+            PatientLaboratoryExam = new PatientLaboratoryExamRepository(_db); 
         }
 
 
@@ -40,10 +41,9 @@ namespace Proyecto_EMUS.Data.Repository
         public ILaboratoryExamRepository LaboratoryExam { get; private set; }
         public IMedicationRepository Medication { get; private set; }
         public IPatientTreatmentRepository PatientTreatment { get; private set; }
-
         public IPatientMedicationRepository PatientMedication { get; private set; }
-
         public IPatientConditionRepository PatientCondition { get; private set; }
+        public IPatientLaboratoryExamRepository PatientLaboratoryExam { get; private set; }
 
         public void Save()
         {

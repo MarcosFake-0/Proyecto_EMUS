@@ -11,7 +11,8 @@ namespace Proyecto_EMUS.Models
         [ForeignKey("PatientId")]
         public Patient Patient { get; set; }
 
-
         public int PatientId { get; set; }
+
+        public ICollection<ClinicalHistoryNote> ClinicalHistoryNotes { get; set; }
     }
 }
