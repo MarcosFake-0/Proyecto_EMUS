@@ -104,8 +104,28 @@ namespace Proyecto_EMUS.Areas.Identity.Pages.Account
         }
 
 
+        private void CreateRoles()
+        {
+            if (!_roleManager.RoleExistsAsync(Utilities.ProyectoEMUSRoles.Role_Admin).GetAwaiter().GetResult())
+            {
+                _roleManager.CreateAsync(new IdentityRole(Utilities.ProyectoEMUSRoles.Role_Admin)).GetAwaiter().GetResult();
+
+            }
+            if (!_roleManager.RoleExistsAsync(Utilities.ProyectoEMUSRoles.Role_Doctor).GetAwaiter().GetResult())
+            {
+                _roleManager.CreateAsync(new IdentityRole(Utilities.ProyectoEMUSRoles.Role_Doctor)).GetAwaiter().GetResult();
+            }
+
+            if (!_roleManager.RoleExistsAsync(Utilities.ProyectoEMUSRoles.Role_Patient).GetAwaiter().GetResult())
+            {
+                _roleManager.CreateAsync(new IdentityRole(Utilities.ProyectoEMUSRoles.Role_Patient)).GetAwaiter().GetResult();
+            }
+        }
+
         public async Task OnGetAsync(string returnUrl = null)
         {
+            CreateRoles();
+
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
