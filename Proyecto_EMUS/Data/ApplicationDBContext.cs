@@ -98,11 +98,11 @@ namespace Proyecto_EMUS.Data
                 .HasForeignKey(ds => ds.GMCNumber)
                 .OnDelete(DeleteBehavior.Cascade); 
 
-            modelBuilder.Entity<DoctorSpecialty>()
-                .HasOne(ds => ds.Specialty)
-                .WithMany(s => s.DoctorSpecialties)
-                .HasForeignKey(ds => ds.IdSpecialty)
-                .OnDelete(DeleteBehavior.Cascade); 
+            //modelBuilder.Entity<DoctorSpecialty>()
+            //    .HasOne(ds => ds.Specialty)
+            //    .WithMany(s => s.DoctorSpecialties)
+            //    .HasForeignKey(ds => ds.IdSpecialty)
+            //    .OnDelete(DeleteBehavior.Cascade); 
 
             base.OnModelCreating(modelBuilder);
         }

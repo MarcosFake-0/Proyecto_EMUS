@@ -2,12 +2,11 @@
 using Proyecto_EMUS.Data.Repository.Interfaces;
 using Proyecto_EMUS.Models;
 
-namespace Proyecto_EMUS.Areas.Admin.Controllers
+namespace Proyecto_EMUS.Areas.Admin.Controllerss
 {
     [Area("Admin")]
     public class SpecialtyController : Controller
     {
-
         private IUnitOfWork _unitOfWork;
 
         public SpecialtyController(IUnitOfWork unitOfWork)
@@ -15,54 +14,47 @@ namespace Proyecto_EMUS.Areas.Admin.Controllers
             _unitOfWork = unitOfWork;
         }
 
-
-        [HttpGet]
         public IActionResult Index()
         {
-
             List<Specialty> specialtyList = _unitOfWork.Specialty.GetAll().ToList();
             return View(specialtyList);
         }
 
         [HttpGet]
-
         public IActionResult Create()
         {
             return View();
         }
 
-
         [HttpPost]
-
         public IActionResult Create(Specialty specialty)
         {
             if (ModelState.IsValid)
             {
                 _unitOfWork.Specialty.Add(specialty);
                 _unitOfWork.Save();
-                return View();
+                TempData["success"] = "Especialidad agregada correctamente";
             }
-            TempData["success"] = "Especialidad Creada";
+
             return RedirectToAction("Index");
+
         }
 
         [HttpGet]
         public IActionResult Edit(int? id)
         {
-            if (id <= 0 && id == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            Specialty? specialtyFromDb = _unitOfWork.Specialty.Get(x => x.Id == id);
+            Specialty? specialty = _unitOfWork.Specialty.Get(x => x.Id == id);
 
-            if (specialtyFromDb == null)
+            if (specialty == null)
             {
                 return NotFound();
             }
-
-
-            return View(specialtyFromDb);
+            return View(specialty);
         }
 
         [HttpPost]
@@ -72,48 +64,73 @@ namespace Proyecto_EMUS.Areas.Admin.Controllers
             {
                 _unitOfWork.Specialty.Update(specialty);
                 _unitOfWork.Save();
+                TempData["success"] = "Especialidad actualizada correctamente";
                 return RedirectToAction("Index");
             }
 
-            TempData["success"] = "specialidad Actualizada";
             return View();
         }
 
+        //[HttpGet]
+        //public IActionResult Delete(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
+        //    Specialty? specialty = _unitOfWork.Specialty.Get(x => x.Id == id);
+
+        //    if (specialty == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return View(specialty);
+        //}
+
+
+
+        //[HttpPost, ActionName("Delete")]
+        //public IActionResult DeletePOST(int? id)
+        //{
+        //    Specialty? specialty = _unitOfWork.Specialty.Get(x => x.Id == id);
+
+        //    if (specialty == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    _unitOfWork.Specialty.Remove(specialty);
+        //    _unitOfWork.Save();
+
+        //    TempData["success"] = "Especialidad eliminada correctamente";
+        //    return RedirectToAction("Index");
+
+        //}
+
+        #region API
         [HttpGet]
+        public IActionResult GetAll()
+        {
+            var specialtyList = _unitOfWork.Specialty.GetAll();
+            return Json(new { data = specialtyList });
+        }
+
+        [HttpDelete]
         public IActionResult Delete(int? id)
         {
-            if (id == null || id <= 0)
-            {
+            var specialtyToDelete = _unitOfWork.Specialty.Get(x => x.Id == id);
 
-                return NotFound();
-            }
+            if (specialtyToDelete == null)
+                return Json(new { success = false, message = "Error while deleting" });
 
-            Specialty? specialtyFromdb = _unitOfWork.Specialty.Get(x => x.Id == id);
+            _unitOfWork.Specialty.Remove(specialtyToDelete);
+            _unitOfWork.Save();
 
-            if (specialtyFromdb == null)
-            {
-                return NotFound();
-            }
+            return Json(new { success = true, message = "Deleted successfully" });
 
-
-            return View(specialtyFromdb);
         }
 
-        [HttpPost]
-
-        public IActionResult Delete(Specialty specialty)
-        {
-            if (ModelState.IsValid)
-            {
-                _unitOfWork.Specialty.Remove(specialty);
-                _unitOfWork.Save();
-                RedirectToAction("Index");
-                TempData["success"] = "especialidad Eliminada Correctamente";
-            }
-            return View();
-        }
-
-
+        #endregion
     }
 }
