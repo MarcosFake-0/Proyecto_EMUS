@@ -20,58 +20,6 @@ namespace Proyecto_EMUS.Areas.Admin.Controllers
             return View();
         }
 
-        //[HttpGet]
-        //public IActionResult Create()
-        //{
-        //    return View();
-        //}
-
-        //[HttpPost]
-        //public IActionResult Create(Specialty specialty)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        _unitOfWork.Specialty.Add(specialty);
-        //        _unitOfWork.Save();
-        //        TempData["success"] = "Especialidad agregada correctamente";
-        //    }
-
-        //    return RedirectToAction("Index");
-
-        //}
-
-        //[HttpGet]
-        //public IActionResult Edit(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    Specialty? specialty = _unitOfWork.Specialty.Get(x => x.Id == id);
-
-        //    if (specialty == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return View(specialty);
-        //}
-
-        //[HttpPost]
-        //public IActionResult Edit(Specialty specialty)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        _unitOfWork.Specialty.Update(specialty);
-        //        _unitOfWork.Save();
-        //        TempData["success"] = "Especialidad actualizada correctamente";
-        //        return RedirectToAction("Index");
-        //    }
-
-        //    return View();
-        //}
-
-
         [HttpGet]
         public IActionResult Upsert(int? id)
         {

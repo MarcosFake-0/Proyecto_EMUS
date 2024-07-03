@@ -5,6 +5,7 @@
         <div class="col-6">
             <h2 class="text-secondary">Lista de Especialidades </h2>
         </div>
+
         <div class="col-6 text-end">
             <a asp-area="Admin" asp-controller="Specialty" asp-action="Upsert" class="btn btn-primary"> <i class="bi bi-plus-circle"></i> Agregar nueva especialidad</a>
         </div>
@@ -13,8 +14,8 @@
     <table id="tblData" class="table table-bordered table-striped" style="width:100%">
         <thead>
             <tr class="table-secondary">
-                <th>Especialidad</th>
-                <th>Acciones</th>
+                <th scope ="row" class="table-dark">Especialidad</th>
+                <th class="table-info" scope="row">Acciones</th>
             </tr>
         </thead>
     </table>
