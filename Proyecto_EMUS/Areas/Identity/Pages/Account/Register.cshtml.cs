@@ -15,7 +15,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering; //IENumerable
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Proyecto_EMUS.Models;
@@ -101,6 +103,15 @@ namespace Proyecto_EMUS.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            public string? Role { get; set; }
+
+            [ValidateNever]
+            public IEnumerable<SelectListItem> RoleList { get; set; }
+
+            public string? FirstName { get; set; }
+            public string? LastName { get; set; }
+            public string? address { get; set; }
         }
 
 
@@ -125,6 +136,14 @@ namespace Proyecto_EMUS.Areas.Identity.Pages.Account
         public async Task OnGetAsync(string returnUrl = null)
         {
             CreateRoles();
+
+            Input = new() 
+            {
+                RoleList = _roleManager.Roles.Select(x => x.Name).Select(i => new SelectListItem{
+                    Text =i, 
+                    Value = i
+                })
+            };
 
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
