@@ -1,5 +1,25 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿<partial name="_Notifications" />
+
+<div class="container">
+    <div class="row pt-4">
+        <div class="col-6">
+            <h2 class="text-primary">Lista de medicamentos</h2>
+        </div>
+        <div class="col-6 text-end">
+            <a asp-asp-area="Medicine" asp-controller="Medication" asp-action="Upsert" class="btn btn-primary"> <i class="bi bi-plus-circle"></i> Agregar nuevo medicamento</a>
+        </div>
+    </div>
+
+    <table id="tblData" table class="table table-bordered table-striped">
+        <thead>
+            <tr class="table-secondary">
+                <th scope="row" class="table-dark">Medicamento</th>
+                <th class="table-dark" scope="row">Acciones</th>
+            </tr>
+        </thead>
+
+    </table>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/medication.js"></script>

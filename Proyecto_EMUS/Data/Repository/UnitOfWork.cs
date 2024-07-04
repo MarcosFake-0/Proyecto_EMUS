@@ -17,7 +17,6 @@ namespace Proyecto_EMUS.Data.Repository
             Specialty = new SpecialtyRepository(_db);
             DoctorSpecialty = new DoctorSpecialtyRepository(_db);
             Treatment = new TreatmentRepository(_db);
-            Drug = new DrugRepository(_db);
             ClinicalHistoryNote = new ClinicalHistoryNoteRepository(_db);
             LaboratoryExam = new LaboratoryExamRepository(_db);
             Medication = new MedicationRepository(_db);
@@ -34,7 +33,6 @@ namespace Proyecto_EMUS.Data.Repository
         public ISpecialtyRepository Specialty { get; private set; }
         public IDoctorSpecialtyRepository DoctorSpecialty { get; private set; }
         public ITreatmentRepository Treatment { get; private set; }
-        public IDrugRepository Drug { get; private set; }
         public IClinicalHistoryNoteRepository ClinicalHistoryNote { get; private set; }
         public ILaboratoryExamRepository LaboratoryExam { get; private set; }
         public IMedicationRepository Medication { get; private set; }

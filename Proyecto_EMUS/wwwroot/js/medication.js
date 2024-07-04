@@ -7,7 +7,7 @@ $(document).ready(function () {
 function loadDataTable() {
     dataTable = $('#tblData').DataTable({
         ajax: {
-            "url": "/Admin/Specialty/getall"
+            "url": "/Medicine/Medication/getall"
         },
         "columns": [
             { "data": "name", "width": "50%" },
@@ -15,7 +15,7 @@ function loadDataTable() {
                 "data": "id",
                 "render": function (data) {
                     return `
-                            <a href="/Admin/Specialty/upsert/${data}" class="btn btn-primary mx-2">
+                            <a href="/Medicine/Medication/upsert/${data}" class="btn btn-primary mx-2">
                                 <i class="bi bi-pencil-square"></i> Editar
                             </a>
 
@@ -43,7 +43,7 @@ function Delete(_id) {
         if (result.isConfirmed) {
 
             $.ajax({
-                url: "/Admin/Specialty/delete/" + _id,
+                url: "/Medicine/Medication/delete/" + _id,
                 type: 'DELETE',
                 success: function (data) {
                     if (data.success) {

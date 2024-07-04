@@ -1,53 +1,26 @@
-﻿@model List<Conditions>
+﻿<partial name="_Notifications" />
 
 < <div class="container">
     <div class="row pt-4">
         <div class="col-6">
-            <h2 class="text-secondary">Lista de Condiciones </h2>
+            <h2 class="text-primary">Lista de Padecimientos </h2>
         </div>
         <div class="col-6 text-end">
-            <a asp-area="Admin" asp-controller="Specialty" asp-action="Create" class="btn btn-primary"> <i class="bi bi-plus-circle"></i> Agregar Nueva Condición</a>
+            <a asp-area="Medicine" asp-controller="Conditions" asp-action="Upsert" class="btn btn-primary"> <i class="bi bi-plus-circle"></i> Agregar Nuevo Padecimiento</a>
         </div>
     </div>
 
-    <table class="table table-bordered table-striped">
+    <table id="tblData" table class="table table-bordered table-striped">
         <thead>
             <tr class="table-secondary">
-                <th scope="row" class="table-dark">Nombre Condicion</th>
-                <th scope="row" class="table-dark">Descripcion</th>
-                <th class="table-info" scope="row">Acciones</th>
+                <th scope="row" class="table-dark">Padecimiento</th>
+                <th scope="row" class="table-dark">Descripción</th>
+                <th class="table-dark" scope="row">Acciones</th>
             </tr>
         </thead>
-        <tbody>
-
-            @foreach (var obj in Model.OrderBy(x => x.Id))
-            {
-                <tr class="table-secondary">
-                    <td>@obj.Name</td>
-                    <td>@obj.Description</td>
-                    <td>
-                        <div class="btn-group w-66">
-
-                            <a asp-area="Medicine" asp-controller="Conditions" asp-action="Edit" asp-route-Id="@obj.Id" class="btn btn-primary ">
-                                <i class="bi bi-pencil-square"></i> Edit
-                            </a>
-                            <div class="btn-group w-30">
-
-                                <a asp-area="Medicine" asp-controller="Conditions" asp-action="Delete" asp-route-Id="@obj.Id" class="btn btn-danger ">
-                                    <i class="bi bi-trash"></i> Delete
-                                </a>
-
-                            </div>
-
-                        </div>
-                    </td>
-
-
-
-                </tr>
-
-            }
-        </tbody>
     </table>
 
 </div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/conditions.js"></script>

@@ -15,15 +15,21 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering; //IENumerable
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
+using Proyecto_EMUS.Models;
+using Proyecto_EMUS.Utilities;
 
 namespace Proyecto_EMUS.Areas.Identity.Pages.Account
 {
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IUserStore<IdentityUser> _userStore;
         private readonly IUserEmailStore<IdentityUser> _emailStore;
@@ -31,6 +37,7 @@ namespace Proyecto_EMUS.Areas.Identity.Pages.Account
         private readonly IEmailSender _emailSender;
 
         public RegisterModel(
+            RoleManager<IdentityRole> roleManager,
             UserManager<IdentityUser> userManager,
             IUserStore<IdentityUser> userStore,
             SignInManager<IdentityUser> signInManager,
@@ -43,6 +50,7 @@ namespace Proyecto_EMUS.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _roleManager= roleManager;
         }
 
         /// <summary>
@@ -97,11 +105,48 @@ namespace Proyecto_EMUS.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            public string? Role { get; set; }
+
+            [ValidateNever]
+            public IEnumerable<SelectListItem> RoleList { get; set; }
+
+            public string? FirstName { get; set; }
+            public string? LastName { get; set; }
+            public string? address { get; set; }
         }
 
 
+        private void CreateRoles()
+        {
+            if (!_roleManager.RoleExistsAsync(Utilities.ProyectoEMUSRoles.Role_Admin).GetAwaiter().GetResult())
+            {
+                _roleManager.CreateAsync(new IdentityRole(Utilities.ProyectoEMUSRoles.Role_Admin)).GetAwaiter().GetResult();
+
+            }
+            if (!_roleManager.RoleExistsAsync(Utilities.ProyectoEMUSRoles.Role_Doctor).GetAwaiter().GetResult())
+            {
+                _roleManager.CreateAsync(new IdentityRole(Utilities.ProyectoEMUSRoles.Role_Doctor)).GetAwaiter().GetResult();
+            }
+
+            if (!_roleManager.RoleExistsAsync(Utilities.ProyectoEMUSRoles.Role_Patient).GetAwaiter().GetResult())
+            {
+                _roleManager.CreateAsync(new IdentityRole(Utilities.ProyectoEMUSRoles.Role_Patient)).GetAwaiter().GetResult();
+            }
+        }
+
         public async Task OnGetAsync(string returnUrl = null)
         {
+            CreateRoles();
+
+            Input = new() 
+            {
+                RoleList = _roleManager.Roles.Select(x => x.Name).Select(i => new SelectListItem{
+                    Text =i, 
+                    Value = i
+                })
+            };
+
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
@@ -116,11 +161,24 @@ namespace Proyecto_EMUS.Areas.Identity.Pages.Account
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+
+                user.address = Input.address;
+                user.FirstName = Input.FirstName;
+                user.LastName = Input.LastName; 
+
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+
+                    if (string.IsNullOrEmpty(Input.Role))
+                    {
+                        await _userManager.AddToRoleAsync(user,  ProyectoEMUSRoles.Role_Patient);
+                    }else
+                    {
+                        await _userManager.AddToRoleAsync(user, Input.Role);
+                    }
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -154,11 +212,11 @@ namespace Proyecto_EMUS.Areas.Identity.Pages.Account
             return Page();
         }
 
-        private IdentityUser CreateUser()
+        private ApplicationUser CreateUser()
         {
             try
             {
-                return Activator.CreateInstance<IdentityUser>();
+                return Activator.CreateInstance<ApplicationUser>();
             }
             catch
             {

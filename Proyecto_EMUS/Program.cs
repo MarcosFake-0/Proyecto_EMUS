@@ -3,6 +3,8 @@ using Proyecto_EMUS.Data;
 using Proyecto_EMUS.Data.Repository.Interfaces;
 using Proyecto_EMUS.Data.Repository;
 using Microsoft.AspNetCore.Identity;
+using Proyecto_EMUS.Utilities;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,12 +14,24 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<ApplicationDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+/*
+ Esto va entre los parentesis de AddIdentity()  : options => options.SignIn.RequireConfirmedAccount = true 
+ */
+builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDBContext>().AddDefaultTokenProviders();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDBContext>();
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = $"/Identity/Account/Login";
+    options.LogoutPath = $"/Identity/Account/Logout";
+    options.AccessDeniedPath  = $"/Identity/Account/AccessDenied";
+});
 
 builder.Services.AddRazorPages();
 
+
+
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IEmailSender, EmailSender>();
 
 
 var app = builder.Build();

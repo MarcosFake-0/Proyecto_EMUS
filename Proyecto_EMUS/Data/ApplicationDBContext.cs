@@ -25,17 +25,18 @@ namespace Proyecto_EMUS.Data
 
         public DbSet<ClinicalHistoryNote> ClinicalHistoryNotes { get; set; }
 
-        public DbSet<Drug> Drugs { get; set; }
-
         public DbSet<LaboratoryExam> LaboratoryExams { get; set; }
 
         public DbSet<Medication> Medications { get; set; }
 
         public DbSet<PatientCondition> PatientConditions { get; set; }
-
         public DbSet<PatientMedication> PatientMedication { get; set; }
         public DbSet<PatientTreatment> PatientTreatment { get; set; }
         public DbSet<PatientLaboratoryExam> PatientLaboratoryExam { get; set; }
+
+
+        // Recuerde hacer la migración antes de nada <==================!!!!!!!!!!!!!!!!!
+        public DbSet<ApplicationUser> ApplicationUser { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
