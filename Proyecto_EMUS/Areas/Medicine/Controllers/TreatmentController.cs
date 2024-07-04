@@ -16,97 +16,66 @@ namespace Proyecto_EMUS.Areas.Medicine.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            List<Treatment> listtreatment = _unitOfWork.Treatment.GetAll().ToList();
-            return View(listtreatment);
-        }
-
-
-        [HttpGet]
-        public IActionResult Create()
-        {
             return View();
         }
 
+        [HttpGet]
+        public IActionResult Upsert(int? id)
+        {
+            Treatment treatment = new Treatment();
+            if (id == null || id <= 0)
+                return View(treatment);
+
+            treatment = _unitOfWork.Treatment.Get(x => x.Id == id);
+            return View(treatment);
+
+        }
+
         [HttpPost]
-        public IActionResult Create(Treatment treatment)
+        public IActionResult Upsert(Treatment treatment)
         {
             if (ModelState.IsValid)
             {
-                _unitOfWork.Treatment.Add(treatment);
-                _unitOfWork.Save();
+                if (treatment.Id == 0)
+                    _unitOfWork.Treatment.Add(treatment);
+                else
+                    _unitOfWork.Treatment.Update(treatment);
 
-                return View();
+                _unitOfWork.Save();
+                TempData["success"] = "Tratamiento guardado correctamente";
             }
-            TempData["success"] = "Tratamiento creado";
+            else
+            {
+                TempData["error"] = "Error al guardar";
+            }
             return RedirectToAction("Index");
-
         }
 
-        [HttpPost]
-        public IActionResult Edit(Treatment treatment)
-        {
-            if (ModelState.IsValid)
-            {
-                _unitOfWork.Treatment.Update(treatment);
-                _unitOfWork.Save();
-
-                return RedirectToAction("Index");
-            }
-            TempData["success"] = "Tratamiento actualizado";
-            return View();
-
-        }
-
-
+        #region API
         [HttpGet]
-        public IActionResult Edit(int? id)
+        public IActionResult GetAll()
         {
-            if (id <= 0 && id == null)
-            {
-                return NotFound();
-            }
-
-            Treatment? TreatmentFromDb = _unitOfWork.Treatment.Get(x => x.Id == id);
-
-            if (TreatmentFromDb == null)
-            {
-                return NotFound();
-            }
-
-            return View(TreatmentFromDb);
-
+            var treatmentList = _unitOfWork.Treatment.GetAll();
+            return Json(new { data = treatmentList });
         }
 
-
-        [HttpGet]
+        [HttpDelete]
         public IActionResult Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var treatmentToDelete = _unitOfWork.Treatment.Get(x => x.Id == id);
 
-            Treatment? TreatmentFromDb = _unitOfWork.Treatment.Get(x => x.Id == id);
+            if (treatmentToDelete == null)
+                return Json(new { success = false, message = "Error al eliminar" });
 
-            if (TreatmentFromDb == null)
-            {
-                return NotFound();
-            }
+            _unitOfWork.Treatment.Remove(treatmentToDelete);
+            _unitOfWork.Save();
 
-            return View(TreatmentFromDb);
+            return Json(new { success = true, message = "Tratamiento eliminado exitosamente" });
+
         }
 
-        [HttpPost]
-        public IActionResult Delete(Treatment treatment)
-        {
-            if (ModelState.IsValid)
-            {
-                _unitOfWork.Treatment.Remove(treatment);
-                _unitOfWork.Save();
-                TempData["success"] = "Tratamiento eliminado correctamente";
-                return RedirectToAction("Index");
-            }
-            return View();
-        }
+        #endregion
+
+
     }
 }
