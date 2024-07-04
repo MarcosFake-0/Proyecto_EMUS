@@ -16,11 +16,11 @@ function loadDataTable() {
                 "render": function (data) {
                     return `
                             <a href="/Medicine/Medication/upsert/${data}" class="btn btn-primary mx-2">
-                                <i class="bi bi-pencil-square"></i> Edit
+                                <i class="bi bi-pencil-square"></i> Editar
                             </a>
 
                             <a onClick=Delete(${data}) class="btn btn-danger mx-2">
-                                <i class="bi bi-trash"></i> Delete
+                                <i class="bi bi-trash"></i> Eliminar
                             </a>
                           `
                 }
@@ -31,13 +31,14 @@ function loadDataTable() {
 
 function Delete(_id) {
     Swal.fire({
-        title: "Are you sure?",
-        text: "You won't be able to revert this!",
+        title: "¿Seguro desea eliminar?",
+        text: "No podrá deshacer la acción",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, delete it!"
+        confirmButtonText: "Sí, eliminar",
+        cancelButtonText: "Cancelar"
     }).then((result) => {
         if (result.isConfirmed) {
 

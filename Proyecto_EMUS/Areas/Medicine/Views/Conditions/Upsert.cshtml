@@ -8,15 +8,15 @@
 
     <div class="border p-3 mt-4">
         <div class="row pb-2">
-            <h2 class="text-primary"> @(Model.Id == 0 ? "Create" : "Update") Condition</h2>
+            <h2 class="text-primary"> @(Model.Id == 0 ? "Crear" : "Editar") Padecimiento</h2>
         </div>
     </div>
 
     <div class="mb-3">
-        <label asp-for="Name" class="p-0"></label>
+        <label asp-for="Name" class="p-0">Nombre padecimiento</label>
         <input asp-for="Name" type="text" class="form-control" />
 
-        <label asp-for="Description" class="p-0"></label>
+        <label asp-for="Description" class="p-0">Descripción padecimiento</label>
         <input asp-for="Description" type="text" class="form-control" />
         <div class="p-2">
             <span asp-validation-for="Name" class="text-danger"></span>
@@ -25,8 +25,8 @@
         </div>
     </div>
 
-    <button type="submit" class="btn btn-primary" style="width:150px">Save</button>
-    <a asp-area="Medicine" asp-controller="Conditions" asp-action="Index" style="width:150px" class="btn btn-secondary">Regresar a lista de condiciones</a>
+    <button type="submit" class="btn btn-primary" style="width:150px; height:75px">Guardar</button>
+    <a asp-area="Medicine" asp-controller="Conditions" asp-action="Index" class="btn btn-primary" style=" width:150px; height:75px">Regresar a lista de padecimientos</a>
 
 
 
