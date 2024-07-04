@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -50,7 +51,7 @@ namespace Proyecto_EMUS.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
-            _roleManager= roleManager;
+            _roleManager = roleManager;
         }
 
         /// <summary>
@@ -139,10 +140,11 @@ namespace Proyecto_EMUS.Areas.Identity.Pages.Account
         {
             CreateRoles();
 
-            Input = new() 
+            Input = new()
             {
-                RoleList = _roleManager.Roles.Select(x => x.Name).Select(i => new SelectListItem{
-                    Text =i, 
+                RoleList = _roleManager.Roles.Select(x => x.Name).Select(i => new SelectListItem
+                {
+                    Text = i,
                     Value = i
                 })
             };
@@ -157,14 +159,21 @@ namespace Proyecto_EMUS.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = CreateUser();
+                var user = CreateApplicationUser();
+
+                if (Input.Role == Utilities.ProyectoEMUSRoles.Role_Doctor)
+                {
+                    user = CreateDoctorUser();
+                    user.GMCNumber = Input.GMCNumber; 
+                }
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
 
                 user.address = Input.address;
                 user.FirstName = Input.FirstName;
-                user.LastName = Input.LastName; 
+                user.LastName = Input.LastName;
+
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
@@ -174,8 +183,9 @@ namespace Proyecto_EMUS.Areas.Identity.Pages.Account
 
                     if (string.IsNullOrEmpty(Input.Role))
                     {
-                        await _userManager.AddToRoleAsync(user,  ProyectoEMUSRoles.Role_Patient);
-                    }else
+                        await _userManager.AddToRoleAsync(user, ProyectoEMUSRoles.Role_Patient);
+                    }
+                    else
                     {
                         await _userManager.AddToRoleAsync(user, Input.Role);
                     }
@@ -212,11 +222,27 @@ namespace Proyecto_EMUS.Areas.Identity.Pages.Account
             return Page();
         }
 
-        private ApplicationUser CreateUser()
+        private ApplicationUser CreateApplicationUser()
         {
             try
             {
                 return Activator.CreateInstance<ApplicationUser>();
+
+            }
+            catch
+            {
+                throw new InvalidOperationException($"Can't create an instance of '{nameof(IdentityUser)}'. " +
+                    $"Ensure that '{nameof(IdentityUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
+                    $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
+            }
+        }
+
+        private DoctorUser CreateDoctorUser()
+        {
+            try
+            {
+                return Activator.CreateInstance<DoctorUser>();
+
             }
             catch
             {
