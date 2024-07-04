@@ -41,4 +41,11 @@
     <Folder Include="wwwroot\images\doctors\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="Areas\Medicine\Views\Medication\Index.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

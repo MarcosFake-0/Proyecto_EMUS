@@ -1,0 +1,33 @@
+﻿@using Proyecto_EMUS.Models
+
+@model Medication
+
+<form method="post">
+
+    <input hidden asp-for="Id" />
+
+    <div class="border p-3 mt-4">
+        <div class="row pb-2">
+            <h2 class="text-primary"> @(Model.Id == 0 ? "Create" : "Update") Medication</h2>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Name" class="p-0"></label>
+        <input asp-for="Name" type="text" class="form-control" />
+
+        <div class="p-2">
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary" style="width:150px">Save</button>
+    <a asp-area="Medicine" asp-controller="Medication" asp-action="Index" style="width:150px" class="btn btn-secondary">Regresar a lista de medicamentos</a>
+
+
+
+
+</form>
+
+
+
