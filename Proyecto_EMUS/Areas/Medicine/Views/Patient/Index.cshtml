@@ -1,4 +1,4 @@
-﻿@* <!--FILTRAR LA TODOS LOS PACIENTES DONDE EL ID DEL DOCTOR QUE LOS ATIENTE SEA IGUAL AL ID DEL USUARIO DOCTOR QUE ESTA LOGEADO ACTUALMENTE-->
+﻿<!--FILTRAR LA TODOS LOS PACIENTES DONDE EL ID DEL DOCTOR QUE LOS ATIENTE SEA IGUAL AL ID DEL USUARIO DOCTOR QUE ESTA LOGEADO ACTUALMENTE-->
 <!--USAR EL DATATABLE DEL SCRIPT patient.js-->
 
 
@@ -6,8 +6,6 @@
 -->
 
 <!--EL BOTON DE VER EXPEDIENTE REDIRIGE A Medicine/Patient/MedicalRecord>-->
-
-@model Doctor
 
 <partial name="_Notifications" />
 
@@ -17,18 +15,18 @@
             <h2 class="text-primary">Pacientes </h2>
         </div>
 
-       <div class="col-6 text-end">
-            <a asp-area="Medici" asp-controller="Specialty" asp-action="Upsert" class="btn btn-primary"> <i class="bi bi-plus-circle"></i> Agregar nueva especialidad</a>
+        <div class="col-6 text-end">
+            <a asp-area="" asp-controller="Specialty" asp-action="Upsert" class="btn btn-primary"> <i class="bi bi-plus-circle"></i> Agregar nueva especialidad</a>
         </div>
     </div>
 
     <table id="tblData" class="table table-bordered table-striped" style="width:100%">
         <thead>
             <tr class="table-secondary">
-                <th scope="row" class="table-dark">Última fecha atención</th>
                 <th scope="row" class="table-dark">Id</th>
                 <th scope="row" class="table-dark">Nombre</th>
                 <th scope="row" class="table-dark">Apellido</th>
+                <th scope="row" class="table-dark">Última fecha atención</th>
                 <th class="table-dark" scope="row">Acciones</th>
             </tr>
         </thead>
@@ -39,4 +37,3 @@
    
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/js/patient.js"></script>
- *@

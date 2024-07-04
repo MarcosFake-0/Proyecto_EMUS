@@ -18,6 +18,11 @@ namespace Proyecto_EMUS.Areas.Medicine.Controllers
             _unitOfWork = unitOfWork;
         }
 
+        public IActionResult Index()
+        {
+            return View();
+        }
+
         [HttpGet]
         public IActionResult MedicalRecord(string? id)
         {
@@ -83,23 +88,14 @@ namespace Proyecto_EMUS.Areas.Medicine.Controllers
         //    return View(patientTreatmentVM.Patient.Id);
         //}
 
-
-
-
-
         #region API
-        //Muestra dataTable con la lista de pacientes ordenados por fecha de atencion 
+        //Muestra dataTable con la lista de pacientes ordenados por fecha de atencion
         [HttpGet]
         public IActionResult GetAllPatients()
         {
-            var listPatients = _unitOfWork.Patient.GetAll();
-
-            if (listPatients == null)
-                return Json(new { data = new List<Patient>() });
-
-            return Json(new { listPatients });
+            var patientList = _unitOfWork.Patient.GetAll();
+            return Json(new { data = patientList });
         }
-
 
         //PRUEBA
         [HttpGet]

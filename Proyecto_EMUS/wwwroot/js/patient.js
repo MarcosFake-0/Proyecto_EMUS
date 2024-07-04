@@ -9,12 +9,13 @@ function loadDataTable() {
     dataTable = $('#tblData').DataTable({
         ajax: {
             "url": "/Medicine/Patient/GetAllPatients"
+
         },
         "columns": [
-            { "data": "lastAttendDate", "width": "15%" }, 
-            { "data": "id", "width": "15%" }, 
-            { "data": "firstName", "width": "15%" }, 
+            { "data": "id", "width": "15%" },
+            { "data": "firstName", "width": "15%" },
             { "data": "lastName", "width": "15%" },
+            { "data": "lastAttendDate", "width": "15%" },
             {
                 "data": "id",
                 "render": function (data) {

@@ -16,7 +16,8 @@ namespace Proyecto_EMUS.Areas.Medicine.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            Doctor doctor = new Doctor();
+            return View(doctor);
         }
 
 
