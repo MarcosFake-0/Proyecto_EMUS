@@ -1,11 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Proyecto_EMUS.Data.Repository.Interfaces;
 using Proyecto_EMUS.Models;
+using Proyecto_EMUS.Utilities;
 
 namespace Proyecto_EMUS.Areas.Admin.Controllers
 {
     [Area("Admin")]
+
+    [Authorize(Roles = ProyectoEMUSRoles.Role_Admin)]
     public class SpecialtyController : Controller
     {
         private IUnitOfWork _unitOfWork;

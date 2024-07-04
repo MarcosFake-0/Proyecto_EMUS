@@ -5,10 +5,13 @@ using Proyecto_EMUS.Models;
 using Proyecto_EMUS.Models.ViewModels;
 using System.Text.Json.Serialization;
 using System.Text.Json;
+using Microsoft.AspNetCore.Authorization;
+using Proyecto_EMUS.Utilities;
 
 namespace Proyecto_EMUS.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = ProyectoEMUSRoles.Role_Admin)]
     public class DoctorController : Controller
     {
         private IUnitOfWork _unitOfWork;
