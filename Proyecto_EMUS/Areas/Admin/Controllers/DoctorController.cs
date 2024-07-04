@@ -5,10 +5,13 @@ using Proyecto_EMUS.Models;
 using Proyecto_EMUS.Models.ViewModels;
 using System.Text.Json.Serialization;
 using System.Text.Json;
+using Microsoft.AspNetCore.Authorization;
+using Proyecto_EMUS.Utilities;
 
 namespace Proyecto_EMUS.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = ProyectoEMUSRoles.Role_Admin)]
     public class DoctorController : Controller
     {
         private IUnitOfWork _unitOfWork;
@@ -20,11 +23,36 @@ namespace Proyecto_EMUS.Areas.Admin.Controllers
             _webHostEnvironment = webHostEnvironment;
         }
 
-        [HttpGet]
         public IActionResult Index()
         {
-            List<Doctor> doctorList = _unitOfWork.Doctor.GetAll(includeProperties: "DoctorSpecialties.Specialty").ToList();
-            return View(doctorList);
+            return View();
+        }
+
+            [HttpGet]
+        public IActionResult GetAll()
+        {
+            //List<Doctor> doctorList = _unitOfWork.Doctor.GetAll(includeProperties:"DoctorSpecialty.Specialty").ToList();
+            //return View(doctorList);
+            var options = new JsonSerializerOptions
+            {
+                ReferenceHandler = ReferenceHandler.Preserve // Configurar para preservar referencias
+            };
+
+
+            var doctorList = _unitOfWork.Doctor.GetAll(includeProperties: "DoctorSpecialties.Specialty")
+                                .Select(doctor => new
+                                {
+                                    doctor.UrlImage,
+                                    doctor.FirstName,
+                                    doctor.LastName,
+                                    doctor.GMCNumber,
+                                    Specialties = doctor.DoctorSpecialties.Select(ds => new
+                                    {
+                                        ds.Specialty.Name
+                                    }).ToList()
+                                }).ToList();
+
+            return Json(new { data = doctorList });
         }
 
         [HttpGet]

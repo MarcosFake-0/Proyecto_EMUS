@@ -7,24 +7,44 @@ $(document).ready(function () {
 function loadDataTable() {
     dataTable = $('#tblData').DataTable({
         ajax: {
-            "url": "/Admin/Specialty/getall"
+            "url": "/Admin/Doctor/getall",
+            "dataSrc": "data"
         },
         "columns": [
-            { "data": "name", "width": "50%" },
             {
-                "data": "id",
+                "data": "urlImage",
+                "render": function (data) {
+                    return `<img src="/images/doctors/${data}" alt="Imagen del Doctor" class="img-thumbnail" height="100px" width="110px" />`;
+                },
+                "width": "20%"
+            },
+            { "data": "firstName", "width": "15%" },
+            { "data": "lastName", "width": "15%" },           
+            {
+                "data": "gmcNumber", "width": "20%"
+            },
+            {
+                "data": "specialties",
+                "render": function (data) {
+                    return data.join(", ");
+                },
+                "width": "20%"
+            },
+            {
                 "render": function (data) {
                     return `
-                            <div class="btn-group btn-lg">
+                        <div class="btn-group btn-lg">
 
-                                <a href="/Admin/Specialty/upsert/${data}" class="btn btn-primary btn-lg">
+                                <a href="/Admin/Doctor/upsert/${data}" class="btn btn-primary btn-lg"> 
 							    <i class="bi bi-pencil-square"></i></a>
                                 <a onClick=Delete(${data}') class="btn btn-danger btn-lg"> 
 							    <i class="bi bi-trash"></i></a>
 
                             </div>
-                          `
-                }
+                                `
+
+                },
+                "width": "30%"
             }
         ]
     });
@@ -44,7 +64,7 @@ function Delete(_id) {
         if (result.isConfirmed) {
 
             $.ajax({
-                url: "/Admin/Specialty/delete/" + _id,
+                url: "/Medicine/Conditions/delete/" + _id,
                 type: 'DELETE',
                 success: function (data) {
                     if (data.success) {
