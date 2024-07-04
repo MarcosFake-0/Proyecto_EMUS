@@ -43,7 +43,7 @@ namespace Proyecto_EMUS.Data.Migra
                 table: "AspNetUsers");
 
             migrationBuilder.DropColumn(
-                name: "address",
+                name: "Address",
                 table: "AspNetUsers");
 
             migrationBuilder.RenameColumn(

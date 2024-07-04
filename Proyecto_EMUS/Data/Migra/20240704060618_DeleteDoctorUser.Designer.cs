@@ -12,8 +12,8 @@ using Proyecto_EMUS.Data;
 namespace Proyecto_EMUS.Data.Migra
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20240704005948_FixingMedication")]
-    partial class FixingMedication
+    [Migration("20240704060618_DeleteDoctorUser")]
+    partial class DeleteDoctorUser
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -240,8 +240,11 @@ namespace Proyecto_EMUS.Data.Migra
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("DateTime")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("CreatedByDoctorId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -289,6 +292,9 @@ namespace Proyecto_EMUS.Data.Migra
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -402,6 +408,15 @@ namespace Proyecto_EMUS.Data.Migra
                         .HasColumnType("int")
                         .HasColumnOrder(1);
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CreatedByDoctorId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.HasKey("IdPatient", "IdCondition");
 
                     b.HasIndex("IdCondition");
@@ -416,6 +431,12 @@ namespace Proyecto_EMUS.Data.Migra
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CreatedByDoctorId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("ExamDate")
                         .HasColumnType("datetime2");
@@ -449,6 +470,15 @@ namespace Proyecto_EMUS.Data.Migra
                         .HasColumnType("int")
                         .HasColumnOrder(1);
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CreatedByDoctorId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.HasKey("IdPatient", "IdMedication");
 
                     b.HasIndex("IdMedication");
@@ -465,6 +495,15 @@ namespace Proyecto_EMUS.Data.Migra
                     b.Property<int>("IdTreatment")
                         .HasColumnType("int")
                         .HasColumnOrder(1);
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CreatedByDoctorId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.HasKey("IdPatient", "IdTreatment");
 
@@ -516,15 +555,18 @@ namespace Proyecto_EMUS.Data.Migra
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("GMCNumber")
+                        .HasColumnType("int");
+
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasDiscriminator().HasValue("ApplicationUser");

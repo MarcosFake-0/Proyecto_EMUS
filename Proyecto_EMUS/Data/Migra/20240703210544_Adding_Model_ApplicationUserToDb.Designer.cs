@@ -545,7 +545,7 @@ namespace Proyecto_EMUS.Data.Migra
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("address")
+                    b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasDiscriminator().HasValue("ApplicationUser");

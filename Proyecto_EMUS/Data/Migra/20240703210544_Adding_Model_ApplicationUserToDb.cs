@@ -31,7 +31,7 @@ namespace Proyecto_EMUS.Data.Migra
                 nullable: true);
 
             migrationBuilder.AddColumn<string>(
-                name: "address",
+                name: "Address",
                 table: "AspNetUsers",
                 type: "nvarchar(max)",
                 nullable: true);
@@ -53,7 +53,7 @@ namespace Proyecto_EMUS.Data.Migra
                 table: "AspNetUsers");
 
             migrationBuilder.DropColumn(
-                name: "address",
+                name: "Address",
                 table: "AspNetUsers");
         }
     }

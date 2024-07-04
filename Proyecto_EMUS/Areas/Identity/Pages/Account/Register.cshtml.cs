@@ -114,7 +114,8 @@ namespace Proyecto_EMUS.Areas.Identity.Pages.Account
 
             public string? FirstName { get; set; }
             public string? LastName { get; set; }
-            public string? address { get; set; }
+            public string? Address { get; set; }
+            public int? GMCNumber { get; set; }
         }
 
 
@@ -163,14 +164,13 @@ namespace Proyecto_EMUS.Areas.Identity.Pages.Account
 
                 if (Input.Role == Utilities.ProyectoEMUSRoles.Role_Doctor)
                 {
-                    user = CreateDoctorUser();
                     user.GMCNumber = Input.GMCNumber; 
                 }
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
 
-                user.address = Input.address;
+                user.Address = Input.Address;
                 user.FirstName = Input.FirstName;
                 user.LastName = Input.LastName;
 
@@ -227,21 +227,6 @@ namespace Proyecto_EMUS.Areas.Identity.Pages.Account
             try
             {
                 return Activator.CreateInstance<ApplicationUser>();
-
-            }
-            catch
-            {
-                throw new InvalidOperationException($"Can't create an instance of '{nameof(IdentityUser)}'. " +
-                    $"Ensure that '{nameof(IdentityUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
-                    $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
-            }
-        }
-
-        private DoctorUser CreateDoctorUser()
-        {
-            try
-            {
-                return Activator.CreateInstance<DoctorUser>();
 
             }
             catch
