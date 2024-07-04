@@ -23,29 +23,8 @@ namespace Proyecto_EMUS.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            //List<Doctor> doctorList = _unitOfWork.Doctor.GetAll(includeProperties:"DoctorSpecialty.Specialty").ToList();
-            //return View(doctorList);
-            var options = new JsonSerializerOptions
-            {
-                ReferenceHandler = ReferenceHandler.Preserve // Configurar para preservar referencias
-            };
-
-
-            var doctorList = _unitOfWork.Doctor.GetAll(includeProperties: "DoctorSpecialties.Specialty")
-                                .Select(doctor => new
-                                {
-                                    doctor.GMCNumber,
-                                    doctor.FirstName,
-                                    doctor.LastName,
-                                    doctor.UrlImage,
-                                    Specialties = doctor.DoctorSpecialties.Select(ds => new
-                                    {
-                                        ds.IdSpecialty,
-                                        ds.Specialty.Name
-                                    }).ToList()
-                                }).ToList();
-
-            return Json(new { data = doctorList });
+            List<Doctor> doctorList = _unitOfWork.Doctor.GetAll(includeProperties: "DoctorSpecialties.Specialty").ToList();
+            return View(doctorList);
         }
 
         [HttpGet]
@@ -60,14 +39,14 @@ namespace Proyecto_EMUS.Areas.Admin.Controllers
                 return View(doctorVM);
             }
 
-            doctorVM.Doctor = _unitOfWork.Doctor.Get(x => x.GMCNumber == id);
+            doctorVM.Doctor = _unitOfWork.Doctor.Get(x => x.GMCNumber == id, includeProperties: "DoctorSpecialties.Specialty");
 
             if (doctorVM.Doctor == null)
             {
                 return NotFound();
             }
 
-            doctorVM.Specialties = (List<Specialty>)_unitOfWork.DoctorSpecialty.GetAllByDoctorGMCNumber(doctorVM.Doctor.GMCNumber);
+            doctorVM.Specialties = _unitOfWork.Specialty.GetAll().ToList();
 
             return View(doctorVM);
         }
@@ -117,7 +96,8 @@ namespace Proyecto_EMUS.Areas.Admin.Controllers
                         ds.Specialty = specialty;
                         _unitOfWork.DoctorSpecialty.Add(ds);
                     }
-                } else
+                }
+                else
                 {
                     _unitOfWork.Doctor.Update(doctorVM.Doctor);
                     _unitOfWork.Save();
@@ -146,14 +126,14 @@ namespace Proyecto_EMUS.Areas.Admin.Controllers
         }
 
         [HttpDelete]
-        public IActionResult DeleteDoctor (int? GMCNumber)
+        public IActionResult DeleteDoctor(int? GMCNumber)
         {
             Doctor doctorToDelete = _unitOfWork.Doctor.Get(x => x.GMCNumber == GMCNumber);
             if (doctorToDelete != null)
             {
                 _unitOfWork.Doctor.Remove(doctorToDelete);
                 _unitOfWork.Save();
-                TempData["success"] = "Se ha eliminado el doctor"; 
+                TempData["success"] = "Se ha eliminado el doctor";
             }
             return RedirectToAction("Index");
         }

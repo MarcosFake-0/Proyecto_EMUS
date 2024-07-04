@@ -21,6 +21,12 @@ namespace Proyecto_EMUS.Models
         public string? FileUrl { get; set; }
 
         [Required]
-        public DateTime ExamDate { get; set; }  
+        public DateTime ExamDate { get; set; }
+
+        [Required]
+        public DateTime CreatedAt { get; set; }
+
+        [Required]
+        public int CreatedByDoctorId { get; set; }
     }
 }
