@@ -18,5 +18,13 @@ namespace Proyecto_EMUS.Models
 
         [ForeignKey("IdCondition")]
         public Conditions Conditions { get; set;}
+
+        [Required]
+        public DateTime CreatedAt { get; set; }
+
+        [Required]
+        public int CreatedByDoctorId { get; set; }
+
+        public bool IsActive { get; set; } = true;
     }
 }
