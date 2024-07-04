@@ -7,8 +7,9 @@ using Proyecto_EMUS.Utilities;
 namespace Proyecto_EMUS.Areas.Medicine.Controllers
 {
     [Area("Medicine")]
-    [Authorize(Roles = ProyectoEMUSRoles.Role_Doctor)]
-   
+    [Authorize(Roles = ProyectoEMUSRoles.Role_Doctor + "," + ProyectoEMUSRoles.Role_Admin)]
+
+
     public class ConditionsController : Controller
     {
         private IUnitOfWork _unitOfWork;
