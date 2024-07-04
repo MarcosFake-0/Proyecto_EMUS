@@ -236,6 +236,89 @@ namespace Proyecto_EMUS.Areas.Medicine.Controllers
             //return RedirectToAction("PatientTreatment", new { id = idPatient}); 
         }
 
+        [HttpGet]
+        public IActionResult PatientCondition(string? id)
+        {
+            if (id == null)
+                return NotFound();
+
+            PatientConditionVM patientConditionVM = new()
+            {
+                Patient = _unitOfWork.Patient.Get(x => x.Id == id, includeProperties: "PatientConditions.Conditions")
+            };
+
+            if (patientConditionVM.Patient == null)
+                return NotFound();
+
+            List<Conditions> allConditions = _unitOfWork.Conditions.GetAll().ToList();
+            List<Conditions> patientConditions = patientConditionVM.Patient.PatientConditions.Select(pc => pc.Conditions).ToList();
+            List<Conditions> conditionsNoAssociated = allConditions.Except(patientConditions).ToList();
+
+            patientConditionVM.Conditions = conditionsNoAssociated.Select(i => new SelectListItem
+            {
+                Text = i.Name,
+                Value = i.Id.ToString()
+            });
+
+            if (patientConditions == null)
+                patientConditionVM.PatientCondition = new List<Conditions>();
+
+            patientConditionVM.PatientCondition = patientConditions;
+            patientConditionVM.Condition = new Conditions();
+
+            return View(patientConditionVM);
+        }
+
+        [HttpPost]
+        public IActionResult PatientCondition(PatientConditionVM patientConditionVM)
+        {
+            if (ModelState.IsValid)
+            {
+                Conditions conditionToAdd = _unitOfWork.Conditions.Get(x => x.Id == patientConditionVM.Condition.Id);
+
+                if (conditionToAdd == null)
+                    return NotFound();
+
+                DateTime now = DateTime.UtcNow;
+                PatientCondition pm = new()
+                {
+                    IdPatient = patientConditionVM.Patient.Id,
+                    IdCondition = patientConditionVM.Condition.Id,
+                    CreatedByDoctorId = 309081,
+                    CreatedAt = now
+                };
+                _unitOfWork.PatientCondition.Add(pm);
+                _unitOfWork.Save();
+            }
+            //return RedirectToAction("Index");
+            return RedirectToAction("PatientCondition", new { id = patientConditionVM.Patient.Id });
+        }
+
+        [HttpDelete]
+        public IActionResult SuspendCondition(string? idPatient, int? idCondition)
+        {
+            if (idPatient == null || idCondition <= 0 || idCondition == null)
+                return NotFound();
+
+            Patient? patient = _unitOfWork.Patient.Get(x => x.Id.Equals(idPatient));
+            Conditions? condition = _unitOfWork.Conditions.Get(x => x.Id == idCondition);
+
+            if (patient == null | condition == null)
+                return NotFound();
+
+            PatientCondition pc = new()
+            {
+                IdPatient = patient.Id,
+                IdCondition = condition.Id
+            };
+
+            _unitOfWork.PatientCondition.Remove(pc);
+            _unitOfWork.Save();
+
+            return Ok();
+            //return RedirectToAction("PatientTreatment", new { id = idPatient}); 
+        }
+
         #region API
         //Muestra dataTable con la lista de pacientes ordenados por fecha de atencion
         [HttpGet]
@@ -279,7 +362,7 @@ namespace Proyecto_EMUS.Areas.Medicine.Controllers
             patientTreatmentVM.Treatment = new Treatment();
 
             return Json(new {data = patientTreatmentVM.Patient});
-            //return View(patientMedicationVM);
+            //return View(patientConditionVM);
         }
         #endregion
     }

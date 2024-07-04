@@ -18,24 +18,27 @@
                     <a asp-area="Medicine" asp-controller="Patient" asp-action="" asp-route-id="@Model.Id" class="btn btn-primary btn-block" style="height: 75px;">Datos paciente</a>
                 </div>
                 <div class="col-md-4 mb-3">
-                    <a asp-area="Medicine" asp-controller="Patient" asp-action="PatientTreatment" asp-route-id="@Model.Id" class="btn btn-primary btn-block" style="height: 75px;">Tratamientos</a>
-                </div>
-                <div class="col-md-4 mb-3">
-                    <a asp-area="Medicine" asp-controller="Patient" asp-action="PatientMedication" asp-route-id="@Model.Id" class="btn btn-primary btn-block" style="height: 75px;">Medicamentos</a>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-4 mb-3">
-                    <a asp-area="Medicine" asp-controller="Patient" asp-action="" asp-route-id="@Model.Id" class="btn btn-primary btn-block" style="height: 75px;">Padecimientos</a>
-                </div>
-                <div class="col-md-4 mb-3">
                     <a asp-area="Medicine" asp-controller="Patient" asp-action="" asp-route-id="@Model.Id" class="btn btn-primary btn-block" style="height: 75px;">Exámenes médicos</a>
                 </div>
                 <div class="col-md-4 mb-3">
                     <a asp-area="Medicine" asp-controller="Patient" asp-action="" asp-route-id="@Model.Id" class="btn btn-primary btn-block" style="height: 75px;">Historial Clínico</a>
                 </div>
             </div>
+            
+
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <a asp-area="Medicine" asp-controller="Patient" asp-action="PatientCondition" asp-route-id="@Model.Id" class="btn btn-primary btn-block" style="height: 75px;">Padecimientos</a>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <a asp-area="Medicine" asp-controller="Patient" asp-action="PatientTreatment" asp-route-id="@Model.Id" class="btn btn-primary btn-block" style="height: 75px;">Tratamientos</a>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <a asp-area="Medicine" asp-controller="Patient" asp-action="PatientMedication" asp-route-id="@Model.Id" class="btn btn-primary btn-block" style="height: 75px;">Medicamentos</a>
+                </div>
+            </div>
         </div>
+        
 
     </div>
 </div>
