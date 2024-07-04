@@ -1,4 +1,4 @@
-﻿@model PatientTreatmentVM
+﻿@model PatientMedicationVM
 
 @{
     ViewData["Title"] = "Paciente " + @Model.Patient.Id;
@@ -6,7 +6,7 @@
 
 <partial name="_Notifications" />
 
-<form method="post" asp-area="Medicine" asp-controller="Patient" asp-action="PatientTreatment">
+<form method="post" asp-area="Medicine" asp-controller="Patient" asp-action="PatientMedication">
     <div class="row d-flex justify-content-center">
         <input asp-for="Patient.Id" hidden />
 
@@ -22,11 +22,11 @@
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="Treatment.Name" class="p-0"></label>
-                    <select asp-for="Treatment.Id" asp-items="@Model.Treatments" class="form-select">
+                    <label asp-for="Medication.Name" class="p-0"></label>
+                    <select asp-for="Medication.Id" asp-items="@Model.Medications" class="form-select">
                         <option disabled selected> --- Seleccione un tratamiento --- </option>
                     </select>
-                    <span asp-validation-for="Treatment.Id" class="text-danger"></span>
+                    <span asp-validation-for="Medication.Id" class="text-danger"></span>
                 </div>
 
                 <table class="table table-bordered table-striped">
@@ -37,12 +37,12 @@
                     </thead>
                     <tbody>
 
-                        @foreach (var obj in Model.PatientTreatments.OrderBy(x => x.Name))
+                        @foreach (var obj in Model.PatientMedication.OrderBy(x => x.Name))
                         {
                             <tr>
                                 <td>@obj.Name</td>
                                 <td>
-                                    <a onclick="deleteTreatment('@Model.Patient.Id', '@obj.Id')" class="btn btn-danger mx-2">
+                                    <a onclick="deleteMedication('@Model.Patient.Id', '@obj.Id')" class="btn btn-danger mx-2">
                                         <i class="bi bi-arrow-down-circle-fill"></i> Suspender
                                     </a>
                                 </td>
@@ -58,14 +58,14 @@
     </div>
 
     <script>
-        function deleteTreatment(idPatient, idTreatment) {
-            fetch(`/Medicine/Patient/SuspendTreatment?idPatient=${idPatient}&idTreatment=${idTreatment}`, {
+        function deleteMedication(idPatient, idMedication) {
+            fetch(`/Medicine/Patient/SuspendMedication?idPatient=${idPatient}&idMedication=${idMedication}`, {
                 method: 'DELETE'
             }).then(response => {
                 if (response.ok) {
                     location.reload();
                 } else {
-                    alert('Error al suspender el tratamiento');
+                    alert('Error al suspender el medicamento');
                 }
             });
         }

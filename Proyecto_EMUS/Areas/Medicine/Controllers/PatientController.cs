@@ -128,7 +128,7 @@ namespace Proyecto_EMUS.Areas.Medicine.Controllers
         }
 
         [HttpDelete]
-        public IActionResult Suspend (string? idPatient, int? idTreatment)
+        public IActionResult SuspendTreatment (string? idPatient, int? idTreatment)
         {
             if (idPatient == null || idTreatment <= 0 || idTreatment == null)
                 return NotFound();
@@ -152,6 +152,89 @@ namespace Proyecto_EMUS.Areas.Medicine.Controllers
             //return RedirectToAction("PatientTreatment", new { id = idPatient}); 
         }
 
+
+        [HttpGet]
+        public IActionResult PatientMedication(string? id)
+        {
+            if (id == null)
+                return NotFound();
+
+            PatientMedicationVM patientMedicationVM = new()
+            {
+                Patient = _unitOfWork.Patient.Get(x => x.Id == id, includeProperties: "PatientMedication.Medication")
+            };
+
+            if (patientMedicationVM.Patient == null)
+                return NotFound();
+
+            List<Medication> allMedication = _unitOfWork.Medication.GetAll().ToList();
+            List<Medication> patientMedication = patientMedicationVM.Patient.PatientMedication.Select(pt => pt.Medication).ToList();
+            List<Medication> medicationNoAssociated = allMedication.Except(patientMedication).ToList();
+
+            patientMedicationVM.Medications = medicationNoAssociated.Select(i => new SelectListItem
+            {
+                Text = i.Name,
+                Value = i.Id.ToString()
+            });
+
+            if (patientMedication == null)
+                patientMedicationVM.PatientMedication = new List<Medication>();
+
+            patientMedicationVM.PatientMedication = patientMedication;
+            patientMedicationVM.Medication = new Medication();
+
+            return View(patientMedicationVM);
+        }
+
+        [HttpPost]
+        public IActionResult PatientMedication(PatientMedicationVM patientMedicationVM)
+        {
+            if (ModelState.IsValid)
+            {
+                Medication medicationToAdd = _unitOfWork.Medication.Get(x => x.Id == patientMedicationVM.Medication.Id);
+
+                if (medicationToAdd == null)
+                    return NotFound();
+
+                DateTime now = DateTime.UtcNow;
+                PatientMedication pm = new()
+                {
+                    IdPatient = patientMedicationVM.Patient.Id,
+                    IdMedication = patientMedicationVM.Medication.Id,
+                    CreatedByDoctorId = 309081,
+                    CreatedAt = now
+                };
+                _unitOfWork.PatientMedication.Add(pm);
+                _unitOfWork.Save();
+            }
+            //return RedirectToAction("Index");
+            return RedirectToAction("PatientMedication", new { id = patientMedicationVM.Patient.Id });
+        }
+
+        [HttpDelete]
+        public IActionResult SuspendMedication(string? idPatient, int? idMedication)
+        {
+            if (idPatient == null || idMedication <= 0 || idMedication == null)
+                return NotFound();
+
+            Patient? patient = _unitOfWork.Patient.Get(x => x.Id.Equals(idPatient));
+            Medication? treatment = _unitOfWork.Medication.Get(x => x.Id == idMedication);
+
+            if (patient == null | treatment == null)
+                return NotFound();
+
+            PatientMedication pm = new()
+            {
+                IdPatient = patient.Id,
+                IdMedication = treatment.Id
+            };
+
+            _unitOfWork.PatientMedication.Remove(pm);
+            _unitOfWork.Save();
+
+            return Ok();
+            //return RedirectToAction("PatientTreatment", new { id = idPatient}); 
+        }
 
         #region API
         //Muestra dataTable con la lista de pacientes ordenados por fecha de atencion
@@ -196,7 +279,7 @@ namespace Proyecto_EMUS.Areas.Medicine.Controllers
             patientTreatmentVM.Treatment = new Treatment();
 
             return Json(new {data = patientTreatmentVM.Patient});
-            //return View(patientTreatmentVM);
+            //return View(patientMedicationVM);
         }
         #endregion
     }
