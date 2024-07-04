@@ -70,7 +70,7 @@ namespace Proyecto_EMUS.Areas.Medicine.Controllers
         }
 
         [HttpGet]
-        public IActionResult AddTreatmentToPatient(string? id)
+        public IActionResult PatientTreatment (string? id)
         {
             if (id == null)
               return NotFound();
@@ -102,23 +102,56 @@ namespace Proyecto_EMUS.Areas.Medicine.Controllers
             return View(patientTreatmentVM);
         }
 
-        //[HttpPost]
-        //public IActionResult AddTreatmentToPatient(PatientTreatmentVM patientTreatmentVM)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        Treatment treatmentToAdd = _unitOfWork.Treatment.Get(x => x.Id == patientTreatmentVM.Treatment.Id);
+        [HttpPost]
+        public IActionResult PatientTreatment(PatientTreatmentVM patientTreatmentVM)
+        {
+            if (ModelState.IsValid)
+            {
+                Treatment treatmentToAdd = _unitOfWork.Treatment.Get(x => x.Id == patientTreatmentVM.Treatment.Id);
 
-        //        if (treatmentToAdd == null)
-        //            return NotFound();
+                if (treatmentToAdd == null)
+                    return NotFound();
 
-        //        PatientTreatment pt = new PatientTreatment();
-        //        pt.IdPatient = patientTreatmentVM.Patient.Id;
-        //        pt.IdTreatment = treatmentToAdd.Id;
-        //        _unitOfWork.PatientTreatment.Add(pt);
-        //    }
-        //    return View(patientTreatmentVM.Patient.Id);
-        //}
+                DateTime now = DateTime.UtcNow;
+                PatientTreatment pt = new()
+                {
+                    IdPatient = patientTreatmentVM.Patient.Id,
+                    IdTreatment = patientTreatmentVM.Treatment.Id,
+                    CreatedByDoctorId = 309081,
+                    CreatedAt = now
+                };
+                _unitOfWork.PatientTreatment.Add(pt);
+                _unitOfWork.Save();
+            }
+            //return RedirectToAction("Index");
+            return RedirectToAction("PatientTreatment", new { id = patientTreatmentVM.Patient.Id });
+        }
+
+        [HttpDelete]
+        public IActionResult Suspend (string? idPatient, int? idTreatment)
+        {
+            if (idPatient == null || idTreatment <= 0 || idTreatment == null)
+                return NotFound();
+
+            Patient? patient = _unitOfWork.Patient.Get(x => x.Id.Equals(idPatient));
+            Treatment? treatment = _unitOfWork.Treatment.Get(x => x.Id == idTreatment);
+
+            if (patient == null | treatment == null)
+                return NotFound();
+
+            PatientTreatment pt = new()
+            {
+                IdPatient = patient.Id,
+                IdTreatment = treatment.Id
+            };
+
+            _unitOfWork.PatientTreatment.Remove(pt);
+            _unitOfWork.Save();
+
+            return Ok();
+            //return RedirectToAction("PatientTreatment", new { id = idPatient}); 
+        }
+
 
         #region API
         //Muestra dataTable con la lista de pacientes ordenados por fecha de atencion
@@ -168,3 +201,4 @@ namespace Proyecto_EMUS.Areas.Medicine.Controllers
         #endregion
     }
 }
+

@@ -8,6 +8,7 @@ namespace Proyecto_EMUS.Models
         public int Id { get; set; }
 
         [Required]
+        [Display(Name="Tratamiento")]
         public string Name { get; set; }
 
         [Required]

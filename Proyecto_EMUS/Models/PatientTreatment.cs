@@ -21,11 +21,9 @@ namespace Proyecto_EMUS.Models
         [ForeignKey("IdTreatment")]
         public Treatment Treatment { get; set; }
 
-        [Required]
-        public DateTime CreatedAt { get; set; }
+        public DateTime? CreatedAt { get; set; }
 
-        [Required]
-        public int CreatedByDoctorId { get; set; }
+        public int? CreatedByDoctorId { get; set; }
 
         public bool IsActive { get; set; } = true; 
     }
