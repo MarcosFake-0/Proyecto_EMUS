@@ -24,6 +24,38 @@ namespace Proyecto_EMUS.Areas.Medicine.Controllers
         }
 
         [HttpGet]
+        public IActionResult Upsert(string? id)
+        {
+            Patient patient = new Patient();
+            if (id == null)
+                return View(patient);
+
+            patient = _unitOfWork.Patient.Get(x => x.Id == id);
+            return View(patient);
+
+        }
+
+        [HttpPost]
+        public IActionResult Upsert(Patient patient)
+        {
+            if (ModelState.IsValid)
+            {
+                if (patient.Id == null)
+                    _unitOfWork.Patient.Add(patient);
+                else
+                    _unitOfWork.Patient.Update(patient);
+
+                _unitOfWork.Save();
+                TempData["success"] = "Paciente guardado correctamente";
+            }
+            else
+            {
+                TempData["error"] = "Error al guardar";
+            }
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
         public IActionResult MedicalRecord(string? id)
         {
             if(id == null)
