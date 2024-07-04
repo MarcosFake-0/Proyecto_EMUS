@@ -30,7 +30,7 @@ namespace Proyecto_EMUS.Models
         public string CivilStatus { get; set; }
 
         [Display(Name = "Doctor")]
-        public int AttendingDoctor { get; set; }
+        public int? AttendingDoctor { get; set; }
 
         [ForeignKey("AttendingDoctor")]
         public Doctor Doctor { get; set; }
@@ -38,7 +38,7 @@ namespace Proyecto_EMUS.Models
         [DataType(DataType.Date)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]
         [Display(Name = "Última fecha de atención")]
-        public DateTime LastAttendDate { get; set; }
+        public DateTime? LastAttendDate { get; set; }
 
         public ICollection<PatientCondition> PatientConditions { get; set; }
         public ICollection<PatientMedication> PatientMedication { get; set; }
