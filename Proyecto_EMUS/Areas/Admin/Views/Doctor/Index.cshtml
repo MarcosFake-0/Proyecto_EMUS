@@ -1,2 +1,35 @@
 ﻿@model List<Doctor>
-<!--Lista de cards con los doctores-->
+<partial name="_Notifications" />
+
+<div class="container">
+    <div class="row pt-4">
+        <div class="col-6">
+            <h2 class="text-primary">Doctores</h2>
+        </div>
+
+        <div class="col-6 text-end">
+            <a asp-area="Admin" asp-controller="Doctor" asp-action="Upsert" class="btn btn-primary"> <i class="bi bi-plus-circle"></i> Agregar doctor</a>
+        </div>
+    </div>
+
+    <table id="tblData" class="table table-bordered table-striped" style="width:100%">
+        <thead>
+            <tr class="table-secondary">
+                <th scope="row" class="table-dark">
+                    fotograf&#xED;a
+                </th>
+                <th class="table-dark" scope="row">Nombre</th>
+                <th class="table-dark" scope="row">Apellido</th>
+                <th class="table-dark" scope="row">
+                    n&#250;mero de colegiado
+                </th>
+                <th class="table-dark" scope="row">Especialidades</th>
+                <th class="table-dark" scope="row">Acciones</th>
+            </tr>
+        </thead>
+    </table>
+
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/doctor.js"></script>

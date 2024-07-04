@@ -16,13 +16,14 @@ function loadDataTable() {
                 "data": "id",
                 "render": function (data) {
                     return `
-                            <a href="/Medicine/Conditions/upsert/${data}" class="btn btn-primary mx-2">
-                                <i class="bi bi-pencil-square"></i> Editar
-                            </a>
+                            <div class="btn-group btn-lg">
 
-                            <a onClick=Delete(${data}) class="btn btn-danger mx-2">
-                                <i class="bi bi-trash"></i> Eliminar
-                            </a>
+                                <a href="/Medicine/Conditions/upsert/${data}" class="btn btn-primary btn-lg">
+							    <i class="bi bi-pencil-square"></i></a>
+                                <a onClick=Delete(${data}') class="btn btn-danger btn-lg"> 
+							    <i class="bi bi-trash"></i></a>
+
+                            </div>
                           `
                 }
             }

@@ -20,8 +20,13 @@ namespace Proyecto_EMUS.Areas.Admin.Controllers
             _webHostEnvironment = webHostEnvironment;
         }
 
-        [HttpGet]
         public IActionResult Index()
+        {
+            return View();
+        }
+
+            [HttpGet]
+        public IActionResult GetAll()
         {
             //List<Doctor> doctorList = _unitOfWork.Doctor.GetAll(includeProperties:"DoctorSpecialty.Specialty").ToList();
             //return View(doctorList);
@@ -34,13 +39,12 @@ namespace Proyecto_EMUS.Areas.Admin.Controllers
             var doctorList = _unitOfWork.Doctor.GetAll(includeProperties: "DoctorSpecialties.Specialty")
                                 .Select(doctor => new
                                 {
-                                    doctor.GMCNumber,
+                                    doctor.UrlImage,
                                     doctor.FirstName,
                                     doctor.LastName,
-                                    doctor.UrlImage,
+                                    doctor.GMCNumber,
                                     Specialties = doctor.DoctorSpecialties.Select(ds => new
                                     {
-                                        ds.IdSpecialty,
                                         ds.Specialty.Name
                                     }).ToList()
                                 }).ToList();
