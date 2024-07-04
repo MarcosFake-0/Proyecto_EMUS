@@ -16,97 +16,64 @@ namespace Proyecto_EMUS.Areas.Medicine.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            List<Medication> listMedications = _unitOfWork.Medication.GetAll().ToList();
-            return View(listMedications);
-        }
-
-
-        [HttpGet]
-        public IActionResult Create()
-        {
             return View();
         }
 
+        [HttpGet]
+        public IActionResult Upsert(int? id)
+        {
+            Medication medication = new Medication();
+            if (id == null || id <= 0)
+                return View(medication);
+
+            medication = _unitOfWork.Medication.Get(x => x.Id == id);
+            return View(medication);
+
+        }
+
         [HttpPost]
-        public IActionResult Create(Medication medication)
+        public IActionResult Upsert(Medication medication)
         {
             if (ModelState.IsValid)
             {
-                _unitOfWork.Medication.Add(medication);
-                _unitOfWork.Save();
+                if (medication.Id == 0)
+                    _unitOfWork.Medication.Add(medication);
+                else
+                    _unitOfWork.Medication.Update(medication);
 
-                return View();
+                _unitOfWork.Save();
+                TempData["success"] = "Medicamento guardado correctamente";
             }
-            TempData["success"] = "Medicamento creado";
+            else
+            {
+                TempData["error"] = "Error al guardar";
+            }
             return RedirectToAction("Index");
-
         }
 
-        [HttpPost]
-        public IActionResult Edit(Medication medication)
-        {
-            if (ModelState.IsValid)
-            {
-                _unitOfWork.Medication.Update(medication);
-                _unitOfWork.Save();
-
-                return RedirectToAction("Index");
-            }
-            TempData["success"] = "Medicamento actualizado";
-            return View();
-
-        }
-
-
+        #region API
         [HttpGet]
-        public IActionResult Edit(int? id)
+        public IActionResult GetAll()
         {
-            if (id <= 0 && id == null)
-            {
-                return NotFound();
-            }
-
-            Medication? medicationFromDb = _unitOfWork.Medication.Get(x => x.Id == id);
-
-            if (medicationFromDb == null)
-            {
-                return NotFound();
-            }
-
-            return View(medicationFromDb);
-
+            var medicationtList = _unitOfWork.Medication.GetAll();
+            return Json(new { data = medicationtList });
         }
 
-
-        [HttpGet]
+        [HttpDelete]
         public IActionResult Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var medicationToDelete = _unitOfWork.Medication.Get(x => x.Id == id);
 
-            Medication? medicationFromDb = _unitOfWork.Medication.Get(x => x.Id == id);
+            if (medicationToDelete == null)
+                return Json(new { success = false, message = "Error al eliminar" });
 
-            if (medicationFromDb == null)
-            {
-                return NotFound();
-            }
+            _unitOfWork.Medication.Remove(medicationToDelete);
+            _unitOfWork.Save();
 
-            return View(medicationFromDb);
+            return Json(new { success = true, message = "Medicamento eliminado exitosamente" });
+
         }
 
-        [HttpPost]
-        public IActionResult Delete(Medication medication)
-        {
-            if (ModelState.IsValid)
-            {
-                _unitOfWork.Medication.Remove(medication);
-                _unitOfWork.Save();
-                TempData["success"] = "Medicamento eliminado correctamente";
-                return RedirectToAction("Index");
-            }
-            return View();
-        }
+        #endregion
     }
 }
