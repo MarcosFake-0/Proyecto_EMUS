@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Proyecto_EMUS.Data.Repository.Interfaces;
 using Proyecto_EMUS.Models;
+using Proyecto_EMUS.Utilities;
 
 namespace Proyecto_EMUS.Areas.Medicine.Controllers
 {
     [Area("Medicine")]
+    [Authorize(Roles = ProyectoEMUSRoles.Role_Doctor + "," + ProyectoEMUSRoles.Role_Admin)]
     public class MedicationController : Controller
     {
         private IUnitOfWork _unitOfWork;

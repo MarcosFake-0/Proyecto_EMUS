@@ -19,5 +19,12 @@ namespace Proyecto_EMUS.Models
         [ForeignKey("IdMedication")]
         public Medication Medication { get; set; }
 
+        [Required]
+        public DateTime CreatedAt { get; set; }
+
+        [Required]
+        public int CreatedByDoctorId { get; set; }
+
+        public bool IsActive { get; set; } = true;
     }
 }

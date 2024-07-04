@@ -5,10 +5,13 @@ using Proyecto_EMUS.Models;
 using Proyecto_EMUS.Models.ViewModels;
 using System.Text.Json.Serialization;
 using System.Text.Json;
+using Microsoft.AspNetCore.Authorization;
+using Proyecto_EMUS.Utilities;
 
 namespace Proyecto_EMUS.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = ProyectoEMUSRoles.Role_Admin)]
     public class DoctorController : Controller
     {
         private IUnitOfWork _unitOfWork;
@@ -64,14 +67,14 @@ namespace Proyecto_EMUS.Areas.Admin.Controllers
                 return View(doctorVM);
             }
 
-            doctorVM.Doctor = _unitOfWork.Doctor.Get(x => x.GMCNumber == id);
+            doctorVM.Doctor = _unitOfWork.Doctor.Get(x => x.GMCNumber == id, includeProperties: "DoctorSpecialties.Specialty");
 
             if (doctorVM.Doctor == null)
             {
                 return NotFound();
             }
 
-            doctorVM.Specialties = (List<Specialty>)_unitOfWork.DoctorSpecialty.GetAllByDoctorGMCNumber(doctorVM.Doctor.GMCNumber);
+            doctorVM.Specialties = _unitOfWork.Specialty.GetAll().ToList();
 
             return View(doctorVM);
         }
@@ -121,7 +124,8 @@ namespace Proyecto_EMUS.Areas.Admin.Controllers
                         ds.Specialty = specialty;
                         _unitOfWork.DoctorSpecialty.Add(ds);
                     }
-                } else
+                }
+                else
                 {
                     _unitOfWork.Doctor.Update(doctorVM.Doctor);
                     _unitOfWork.Save();
@@ -150,14 +154,14 @@ namespace Proyecto_EMUS.Areas.Admin.Controllers
         }
 
         [HttpDelete]
-        public IActionResult DeleteDoctor (int? GMCNumber)
+        public IActionResult DeleteDoctor(int? GMCNumber)
         {
             Doctor doctorToDelete = _unitOfWork.Doctor.Get(x => x.GMCNumber == GMCNumber);
             if (doctorToDelete != null)
             {
                 _unitOfWork.Doctor.Remove(doctorToDelete);
                 _unitOfWork.Save();
-                TempData["success"] = "Se ha eliminado el doctor"; 
+                TempData["success"] = "Se ha eliminado el doctor";
             }
             return RedirectToAction("Index");
         }

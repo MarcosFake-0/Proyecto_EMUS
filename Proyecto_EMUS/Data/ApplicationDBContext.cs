@@ -134,7 +134,7 @@ namespace Proyecto_EMUS.Data
                 .OnDelete(DeleteBehavior.Cascade);
 
             base.OnModelCreating(modelBuilder);
-        }
 
+        }
     }
 }
