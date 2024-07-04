@@ -255,7 +255,7 @@ namespace Proyecto_EMUS.Data.Migra
 
                     b.HasIndex("PatientId");
 
-                    b.ToTable("ClinicalHistoryNotes");
+                    b.ToTable("ClinicalHistoryNotes", (string)null);
                 });
 
             modelBuilder.Entity("Proyecto_EMUS.Models.Conditions", b =>
@@ -277,7 +277,7 @@ namespace Proyecto_EMUS.Data.Migra
 
                     b.HasKey("Id");
 
-                    b.ToTable("Conditions");
+                    b.ToTable("Conditions", (string)null);
                 });
 
             modelBuilder.Entity("Proyecto_EMUS.Models.Doctor", b =>
@@ -303,7 +303,7 @@ namespace Proyecto_EMUS.Data.Migra
 
                     b.HasKey("GMCNumber");
 
-                    b.ToTable("Doctor");
+                    b.ToTable("Doctor", (string)null);
                 });
 
             modelBuilder.Entity("Proyecto_EMUS.Models.DoctorSpecialty", b =>
@@ -320,7 +320,7 @@ namespace Proyecto_EMUS.Data.Migra
 
                     b.HasIndex("IdSpecialty");
 
-                    b.ToTable("DoctorSpecialty");
+                    b.ToTable("DoctorSpecialty", (string)null);
                 });
 
             modelBuilder.Entity("Proyecto_EMUS.Models.LaboratoryExam", b =>
@@ -340,7 +340,7 @@ namespace Proyecto_EMUS.Data.Migra
 
                     b.HasKey("Id");
 
-                    b.ToTable("LaboratoryExams");
+                    b.ToTable("LaboratoryExams", (string)null);
                 });
 
             modelBuilder.Entity("Proyecto_EMUS.Models.Medication", b =>
@@ -357,7 +357,7 @@ namespace Proyecto_EMUS.Data.Migra
 
                     b.HasKey("Id");
 
-                    b.ToTable("Medications");
+                    b.ToTable("Medications", (string)null);
                 });
 
             modelBuilder.Entity("Proyecto_EMUS.Models.Patient", b =>
@@ -392,7 +392,7 @@ namespace Proyecto_EMUS.Data.Migra
 
                     b.HasIndex("AttendingDoctor");
 
-                    b.ToTable("Patient");
+                    b.ToTable("Patient", (string)null);
                 });
 
             modelBuilder.Entity("Proyecto_EMUS.Models.PatientCondition", b =>
@@ -418,7 +418,7 @@ namespace Proyecto_EMUS.Data.Migra
 
                     b.HasIndex("IdCondition");
 
-                    b.ToTable("PatientConditions");
+                    b.ToTable("PatientConditions", (string)null);
                 });
 
             modelBuilder.Entity("Proyecto_EMUS.Models.PatientLaboratoryExam", b =>
@@ -454,7 +454,7 @@ namespace Proyecto_EMUS.Data.Migra
 
                     b.HasIndex("IdPatient");
 
-                    b.ToTable("PatientLaboratoryExam");
+                    b.ToTable("PatientLaboratoryExam", (string)null);
                 });
 
             modelBuilder.Entity("Proyecto_EMUS.Models.PatientMedication", b =>
@@ -480,7 +480,7 @@ namespace Proyecto_EMUS.Data.Migra
 
                     b.HasIndex("IdMedication");
 
-                    b.ToTable("PatientMedication");
+                    b.ToTable("PatientMedication", (string)null);
                 });
 
             modelBuilder.Entity("Proyecto_EMUS.Models.PatientTreatment", b =>
@@ -506,7 +506,7 @@ namespace Proyecto_EMUS.Data.Migra
 
                     b.HasIndex("IdTreatment");
 
-                    b.ToTable("PatientTreatment");
+                    b.ToTable("PatientTreatment", (string)null);
                 });
 
             modelBuilder.Entity("Proyecto_EMUS.Models.Specialty", b =>
@@ -524,7 +524,7 @@ namespace Proyecto_EMUS.Data.Migra
 
                     b.HasKey("Id");
 
-                    b.ToTable("Specialty");
+                    b.ToTable("Specialty", (string)null);
                 });
 
             modelBuilder.Entity("Proyecto_EMUS.Models.Treatment", b =>
@@ -545,7 +545,7 @@ namespace Proyecto_EMUS.Data.Migra
 
                     b.HasKey("Id");
 
-                    b.ToTable("Treatment");
+                    b.ToTable("Treatment", (string)null);
                 });
 
             modelBuilder.Entity("Proyecto_EMUS.Models.ApplicationUser", b =>

@@ -40,7 +40,7 @@ namespace Proyecto_EMUS.Areas.Medicine.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (patient.Id == null)
+                if (_unitOfWork.Patient.Get(x => x.Id == patient.Id) == null)
                     _unitOfWork.Patient.Add(patient);
                 else
                     _unitOfWork.Patient.Update(patient);

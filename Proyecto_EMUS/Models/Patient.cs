@@ -25,7 +25,6 @@ namespace Proyecto_EMUS.Models
         public string LastName { get; set; }
 
         [Required]
-        [AllowedValues("Soltero(a), Casado(a), Divorciado(a), Viudo(a), Separado(a), Unión libre")]
         [Display(Name = "Estado cívil")]
         public string CivilStatus { get; set; }
 
@@ -33,18 +32,18 @@ namespace Proyecto_EMUS.Models
         public int? AttendingDoctor { get; set; }
 
         [ForeignKey("AttendingDoctor")]
-        public Doctor Doctor { get; set; }
+        public Doctor? Doctor { get; set; }
 
         [DataType(DataType.Date)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]
         [Display(Name = "Última fecha de atención")]
         public DateTime? LastAttendDate { get; set; }
 
-        public ICollection<PatientCondition> PatientConditions { get; set; }
-        public ICollection<PatientMedication> PatientMedication { get; set; }
-        public ICollection<PatientTreatment> PatientTreatments { get; set; }
-        public ICollection<PatientLaboratoryExam> PatientLaboratoryExams { get; set; }
-        public ICollection<ClinicalHistoryNote> ClinicalHistoryNotes { get; set; }
+        public ICollection<PatientCondition>? PatientConditions { get; set; }
+        public ICollection<PatientMedication>? PatientMedication { get; set; }
+        public ICollection<PatientTreatment>? PatientTreatments { get; set; }
+        public ICollection<PatientLaboratoryExam>? PatientLaboratoryExams { get; set; }
+        public ICollection<ClinicalHistoryNote>? ClinicalHistoryNotes { get; set; }
 
 
 

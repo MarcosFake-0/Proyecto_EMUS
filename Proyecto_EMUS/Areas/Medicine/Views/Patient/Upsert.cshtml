@@ -4,7 +4,7 @@
 
 <form method="post">
 
-    <input hidden asp-for="Id" />
+   @*  <input hidden asp-for="Id" /> *@
 
     <div class="border p-3 mt-4">
         <div class="row pb-2">
@@ -23,7 +23,7 @@
 
     <div class="mb-3">
         <label asp-for="DayOfBirth" class="p-0"></label>
-        <input asp-for="DayOfBirth" type="date" class="form-control" />
+        <input asp-for="DayOfBirth" type="date" class="form-control" min="1900-01-01" max="2023-12-31"/>
 
         <div class="p-2">
             <span asp-validation-for="DayOfBirth" class="text-danger"></span>
@@ -50,12 +50,17 @@
 
     <div class="mb-3">
         <label asp-for="CivilStatus" class="p-0"></label>
-        <input asp-for="CivilStatus" type="text" class="form-control" />
-
-        <div class="p-2">
-            <span asp-validation-for="CivilStatus" class="text-danger"></span>
-        </div>
+        <select asp-for="CivilStatus" class="form-control">
+            <option value="Soltero(a)">Soltero(a)</option>
+            <option value="Casado(a)">Casado(a)</option>
+            <option value="Divorciado(a)">Divorciado(a)</option>
+            <option value="Viudo(a)">Viudo(a)</option>
+            <option value="Separado(a)">Separado(a)</option>
+            <option value="Unión libre">Unión libre</option>
+        </select>
     </div>
+
+    
 
     <button type="submit" class="btn btn-primary" style="width:150px; height:75px">Guardar</button>
     <a asp-area="Medicine" asp-controller="Patient" asp-action="Index" class="btn btn-primary" style=" width:150px; height:75px">Regresar a lista de pacientes</a>
