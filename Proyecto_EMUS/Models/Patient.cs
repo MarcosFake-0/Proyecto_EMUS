@@ -7,30 +7,38 @@ namespace Proyecto_EMUS.Models
     {
 
         [Key]
+        [Display(Name = "Cédula")]
         public string Id { get; set; }
 
         [Required]
+        [Display(Name ="Fecha de nacimiento")]
         public DateOnly DayOfBirth { get; set; }
 
         [Required]
         [MaxLength(50)]
+        [Display(Name = "Primer Nombre")]
         public string FirstName { get; set; }
 
         [Required]
         [MaxLength(50)]
+        [Display(Name = "Primer apellido")]
         public string LastName { get; set; }
+
         [Required]
         [AllowedValues("Soltero(a), Casado(a), Divorciado(a), Viudo(a), Separado(a), Unión libre")]
+        [Display(Name = "Estado cívil")]
         public string CivilStatus { get; set; }
 
-        public int AttendingDoctor { get; set; }
+        [Display(Name = "Doctor")]
+        public int? AttendingDoctor { get; set; }
 
         [ForeignKey("AttendingDoctor")]
         public Doctor Doctor { get; set; }
 
         [DataType(DataType.Date)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]
-        public DateTime LastAttendDate { get; set; }
+        [Display(Name = "Última fecha de atención")]
+        public DateTime? LastAttendDate { get; set; }
 
         public ICollection<PatientCondition> PatientConditions { get; set; }
         public ICollection<PatientMedication> PatientMedication { get; set; }

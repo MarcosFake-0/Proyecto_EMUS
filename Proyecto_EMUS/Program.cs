@@ -5,6 +5,7 @@ using Proyecto_EMUS.Data.Repository;
 using Microsoft.AspNetCore.Identity;
 using Proyecto_EMUS.Utilities;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Proyecto_EMUS.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
