@@ -18,6 +18,14 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
  Esto va entre los parentesis de AddIdentity()  : options => options.SignIn.RequireConfirmedAccount = true 
  */
 builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDBContext>().AddDefaultTokenProviders();
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = $"/Identity/Account/Login";
+    options.LogoutPath = $"/Identity/Account/Logout";
+    options.AccessDeniedPath  = $"/Identity/Account/AccessDenied";
+});
+
 builder.Services.AddRazorPages();
 
 
