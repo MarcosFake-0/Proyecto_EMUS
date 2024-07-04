@@ -27,30 +27,56 @@
                                 <span class="visually-hidden">(current)</span>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="Admin" asp-controller="Doctor" asp-action="Index">Doctor</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="Admin" asp-controller="Specialty" asp-action="Index">Especialidades</a>
-                        </li>
-                        
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Patient" asp-action="Index">Paciente</a>
-                        </li>
+                       
 
-                        <li class="nav-item dropdown">
-                            <a class="nav-link active dropdown-toggle" data-bs-toggle="dropdown" href="/" role="button" aria-haspopup="true" aria-expanded="false">Medicina</a>
-                            <div class="dropdown-menu">
-                                <a class="nav-link text-light" asp-area="" asp-controller="Patient" asp-action="Index">Pacientes</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="nav-link text-light" asp-area="" asp-controller="Conditions" asp-action="Index">Padecimientos</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="nav-link text-light" asp-area="" asp-controller="Treatment" asp-action="Index">Tratamientos</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="nav-link text-light" asp-area="" asp-controller="Medication" asp-action="Index">Medicamentos</a>
-                            </div>
-                        </li>
+
+                        @if (User.IsInRole(Proyecto_EMUS.Utilities.ProyectoEMUSRoles.Role_Admin))
+                        {
+
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="Admin" asp-controller="Doctor" asp-action="Index">Doctor</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="Admin" asp-controller="Specialty" asp-action="Index">Especialidades</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-controller="Patient" asp-action="Index">Paciente</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link active dropdown-toggle" data-bs-toggle="dropdown" href="/" role="button" aria-haspopup="true" aria-expanded="false">Medicina</a>
+                                <div class="dropdown-menu">
+                                    <a class="nav-link text-light" asp-area="" asp-controller="Patient" asp-action="Index">Pacientes</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="nav-link text-light" asp-area="" asp-controller="Conditions" asp-action="Index">Padecimientos</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="nav-link text-light" asp-area="" asp-controller="Treatment" asp-action="Index">Tratamientos</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="nav-link text-light" asp-area="" asp-controller="Medication" asp-action="Index">Medicamentos</a>
+                                </div>
+                            </li>
+                        }
+                        else if (User.IsInRole(Proyecto_EMUS.Utilities.ProyectoEMUSRoles.Role_Doctor))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link active dropdown-toggle" data-bs-toggle="dropdown" href="/" role="button" aria-haspopup="true" aria-expanded="false">Medicina</a>
+                                <div class="dropdown-menu">
+                                    <a class="nav-link text-light" asp-area="" asp-controller="Patient" asp-action="Index">Pacientes</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="nav-link text-light" asp-area="" asp-controller="Conditions" asp-action="Index">Padecimientos</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="nav-link text-light" asp-area="" asp-controller="Treatment" asp-action="Index">Tratamientos</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="nav-link text-light" asp-area="" asp-controller="Medication" asp-action="Index">Medicamentos</a>
+                                </div>
+                            </li>
+                        }
+                        
+                       
                     </ul>
+
+
+                   
 
                     <partial name ="_loginPartial"></partial>
                 </div>
