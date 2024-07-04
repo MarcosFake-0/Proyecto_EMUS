@@ -5,8 +5,22 @@
 <!--ORDEN DE LAS COLUMNAS DEL DATA TABLE: Ultima fecha atencion, Cedula paciente, Primer nombre, Apellido, boton: Ver expediente academico 
 -->
 
-<!--EL BOTON DE VER EXPEDIENTE REDIRIGE A Medicine/Patient/MedicalRecord>
+<!--EL BOTON DE VER EXPEDIENTE REDIRIGE A Medicine/Patient/MedicalRecord-->
 
 <h1 class="display-4">Home View</h1>
 
-   
+@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+
+@if (SignInManager.IsSignedIn(User))
+{
+    var user = await UserManager.GetUserAsync(User);
+    <h1> Bienvdenido Doctor(a) @user.UserName</h1>
+    <a asp-area="Medicine" asp-controller="Patient" asp-action="GetAllPatients" asp-route-id="@user.UserName">Ver pacientes</a>
+} else
+{
+    <h1>No se ha logeado</h1>
+}

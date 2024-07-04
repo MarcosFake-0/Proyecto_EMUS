@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Proyecto_EMUS.Data;
 using Proyecto_EMUS.Data.Repository.Interfaces;
 using Proyecto_EMUS.Models;
 using Proyecto_EMUS.Models.ViewModels;
@@ -13,10 +15,30 @@ namespace Proyecto_EMUS.Areas.Medicine.Controllers
     public class PatientController : Controller
     {
         private IUnitOfWork _unitOfWork;
-        public PatientController(IUnitOfWork unitOfWork)
+        private readonly ApplicationDBContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
+
+
+        public PatientController(IUnitOfWork unitOfWork, ApplicationDBContext context, UserManager<ApplicationUser> userManager)
         {
             _unitOfWork = unitOfWork;
+            _context = context;
+            _userManager = userManager;
         }
+
+        [HttpGet]
+        //Recibe el id que es el usuario del doctor 
+        public IActionResult GetAllPatients(string id)
+        {
+            var user = _userManager.Users.FirstOrDefault(i => i.UserName == id);
+
+            var firstName = user.FirstName;
+
+            Patient patient = new Patient();
+            patient.FirstName = "Ashley"; 
+            return View(patient);
+        }
+
 
         [HttpGet]
         public IActionResult MedicalRecord(string? id)
