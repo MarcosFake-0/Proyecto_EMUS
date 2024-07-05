@@ -54,13 +54,13 @@
                             <li class="nav-item dropdown">
                                 <a class="nav-link active dropdown-toggle" data-bs-toggle="dropdown" href="/" role="button" aria-haspopup="true" aria-expanded="false">Administración</a>
                                 <div class="dropdown-menu">
-                                    <a class="nav-link text-light" asp-area="Admin" asp-controller="Doctor" asp-action="Index">Doctor</a>
+                                    <a class="nav-link text-light" asp-area="Admin" asp-controller="Doctor" asp-action="Index">Doctores</a>
                                     <div class="dropdown-divider"></div>
                                     <a class="nav-link text-light" asp-area="Admin" asp-controller="Specialty" asp-action="Index">Especialidades</a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="nav-link text-light" asp-area="" asp-controller="Patient" asp-action="Index">Paciente</a>
+                                    <a class="nav-link text-light" asp-area="" asp-controller="Patient" asp-action="Index">Pacientes</a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="nav-link text-light" id="register" asp-area="Identity" asp-page="/Account/Register">Registrar</a>
+                                    <a class="nav-link text-light" id="register" asp-area="Identity" asp-page="/Account/Register">Registrar usuarios</a>
                                 </div>
                             </li>
 
@@ -74,8 +74,6 @@
                                     <a class="nav-link text-light" asp-area="" asp-controller="Treatment" asp-action="Index">Tratamientos</a>
                                     <div class="dropdown-divider"></div>
                                     <a class="nav-link text-light" asp-area="" asp-controller="Medication" asp-action="Index">Medicamentos</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="nav-link text-light" id="register" asp-area="Identity" asp-page="/Account/Register">Registrar</a>
                                 </div>
                             </li>
                         }
@@ -91,6 +89,9 @@
                                     <a class="nav-link text-light" asp-area="" asp-controller="Treatment" asp-action="Index">Tratamientos</a>
                                     <div class="dropdown-divider"></div>
                                     <a class="nav-link text-light" asp-area="" asp-controller="Medication" asp-action="Index">Medicamentos</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="nav-link text-light" id="register" asp-area="Identity" asp-page="/Account/Register">Registrar pacientes</a>
+
                                 </div>
                             </li>
                         }                        
@@ -126,9 +127,4 @@
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
-<footer class="border-top footer text-muted">
-    <div class="container">
-        &copy; 2024 - Proyecto_EMUS - Ashley Torres Valverde C27826 - Marco Garbanzo Hernández C19048 - Jonathan Reyes Moncada C06456 - Gabriel Carranza Rodríguez C11668</a>
-    </div>
-</footer>
 </html>
