@@ -6,6 +6,7 @@ namespace Proyecto_EMUS.Models
     public class PatientLaboratoryExam
     {
         [Key]
+
         public int Id { get; set; }
 
         public string IdPatient { get; set; }

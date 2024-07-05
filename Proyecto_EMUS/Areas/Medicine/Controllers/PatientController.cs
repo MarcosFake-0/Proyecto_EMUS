@@ -40,7 +40,7 @@ namespace Proyecto_EMUS.Areas.Medicine.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (patient.Id == null)
+                if (_unitOfWork.Patient.Get(x => x.Id == patient.Id) == null)
                     _unitOfWork.Patient.Add(patient);
                 else
                     _unitOfWork.Patient.Update(patient);
@@ -55,25 +55,72 @@ namespace Proyecto_EMUS.Areas.Medicine.Controllers
             return RedirectToAction("Index");
         }
 
+
+        //[HttpGet]
+        //public IActionResult UpsertNote(int? id) 
+        //{
+        //    ClinicalHistoryNote clinicalHistoryNote = new ClinicalHistoryNote();
+        //    if (id == null)
+        //        return View(clinicalHistoryNote);
+
+        //    clinicalHistoryNote = _unitOfWork.ClinicalHistoryNote.Get(x => x.Id == id);
+        //    return View(clinicalHistoryNote);
+        //}
+
+        //[HttpPost]
+        //public IActionResult UpsertNote(ClinicalHistoryNote clinicalHistoryNote)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        if (_unitOfWork.ClinicalHistoryNote.Get(x => x.Id == clinicalHistoryNote.Id) == null)
+        //        {
+
+        //            DateTime now = DateTime.UtcNow;
+        //            ClinicalHistoryNote note = new()
+        //            {
+        //                Description = clinicalHistoryNote.Description,
+        //                CreatedAt = now,
+        //                PatientId = patientId,
+        //                CreatedByDoctorId = 309081,
+                        
+        //            };
+
+        //            _unitOfWork.ClinicalHistoryNote.Add(note);
+
+        //        }
+        //        else
+        //            _unitOfWork.ClinicalHistoryNote.Update(clinicalHistoryNote);
+
+        //        _unitOfWork.Save();
+        //        TempData["success"] = "Nota guardada correctamente";
+        //    }
+        //    else
+        //    {
+        //        TempData["error"] = "Error al guardar";
+        //    }
+        //    return RedirectToAction("GetAllPatientsNotes", new { id = clinicalHistoryNote.Patient.Id });
+        //}
+
+
         [HttpGet]
         public IActionResult MedicalRecord(string? id)
         {
-            if(id == null)
-                return NotFound(); 
+            if (id == null)
+                return NotFound();
 
             Patient patient = _unitOfWork.Patient.Get(p => p.Id == id);
 
             if (patient == null)
                 return NotFound();
-            
+
             return View(patient);
         }
 
         [HttpGet]
-        public IActionResult AddTreatmentToPatient(string? id)
+        public IActionResult PatientTreatment(string? id)
         {
             if (id == null)
-              return NotFound();
+                return NotFound();
 
             PatientTreatmentVM patientTreatmentVM = new()
             {
@@ -81,7 +128,7 @@ namespace Proyecto_EMUS.Areas.Medicine.Controllers
             };
 
             if (patientTreatmentVM.Patient == null)
-              return NotFound();
+                return NotFound();
 
             List<Treatment> allTreatments = _unitOfWork.Treatment.GetAll().ToList();
             List<Treatment> patientTreatments = patientTreatmentVM.Patient.PatientTreatments.Select(pt => pt.Treatment).ToList();
@@ -102,23 +149,222 @@ namespace Proyecto_EMUS.Areas.Medicine.Controllers
             return View(patientTreatmentVM);
         }
 
-        //[HttpPost]
-        //public IActionResult AddTreatmentToPatient(PatientTreatmentVM patientTreatmentVM)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        Treatment treatmentToAdd = _unitOfWork.Treatment.Get(x => x.Id == patientTreatmentVM.Treatment.Id);
+        [HttpPost]
+        public IActionResult PatientTreatment(PatientTreatmentVM patientTreatmentVM)
+        {
+            if (ModelState.IsValid)
+            {
+                Treatment treatmentToAdd = _unitOfWork.Treatment.Get(x => x.Id == patientTreatmentVM.Treatment.Id);
 
-        //        if (treatmentToAdd == null)
-        //            return NotFound();
+                if (treatmentToAdd == null)
+                    return NotFound();
 
-        //        PatientTreatment pt = new PatientTreatment();
-        //        pt.IdPatient = patientTreatmentVM.Patient.Id;
-        //        pt.IdTreatment = treatmentToAdd.Id;
-        //        _unitOfWork.PatientTreatment.Add(pt);
-        //    }
-        //    return View(patientTreatmentVM.Patient.Id);
-        //}
+                DateTime now = DateTime.UtcNow;
+                PatientTreatment pt = new()
+                {
+                    IdPatient = patientTreatmentVM.Patient.Id,
+                    IdTreatment = patientTreatmentVM.Treatment.Id,
+                    CreatedByDoctorId = 309081,
+                    CreatedAt = now
+                };
+                _unitOfWork.PatientTreatment.Add(pt);
+                _unitOfWork.Save();
+            }
+            //return RedirectToAction("Index");
+            return RedirectToAction("PatientTreatment", new { id = patientTreatmentVM.Patient.Id });
+        }
+
+        [HttpDelete]
+        public IActionResult SuspendTreatment(string? idPatient, int? idTreatment)
+        {
+            if (idPatient == null || idTreatment <= 0 || idTreatment == null)
+                return NotFound();
+
+            Patient? patient = _unitOfWork.Patient.Get(x => x.Id.Equals(idPatient));
+            Treatment? treatment = _unitOfWork.Treatment.Get(x => x.Id == idTreatment);
+
+            if (patient == null | treatment == null)
+                return NotFound();
+
+            PatientTreatment pt = new()
+            {
+                IdPatient = patient.Id,
+                IdTreatment = treatment.Id
+            };
+
+            _unitOfWork.PatientTreatment.Remove(pt);
+            _unitOfWork.Save();
+
+            return Ok();
+            //return RedirectToAction("PatientTreatment", new { id = idPatient}); 
+        }
+
+
+        [HttpGet]
+        public IActionResult PatientMedication(string? id)
+        {
+            if (id == null)
+                return NotFound();
+
+            PatientMedicationVM patientMedicationVM = new()
+            {
+                Patient = _unitOfWork.Patient.Get(x => x.Id == id, includeProperties: "PatientMedication.Medication")
+            };
+
+            if (patientMedicationVM.Patient == null)
+                return NotFound();
+
+            List<Medication> allMedication = _unitOfWork.Medication.GetAll().ToList();
+            List<Medication> patientMedication = patientMedicationVM.Patient.PatientMedication.Select(pt => pt.Medication).ToList();
+            List<Medication> medicationNoAssociated = allMedication.Except(patientMedication).ToList();
+
+            patientMedicationVM.Medications = medicationNoAssociated.Select(i => new SelectListItem
+            {
+                Text = i.Name,
+                Value = i.Id.ToString()
+            });
+
+            if (patientMedication == null)
+                patientMedicationVM.PatientMedication = new List<Medication>();
+
+            patientMedicationVM.PatientMedication = patientMedication;
+            patientMedicationVM.Medication = new Medication();
+
+            return View(patientMedicationVM);
+        }
+
+        [HttpPost]
+        public IActionResult PatientMedication(PatientMedicationVM patientMedicationVM)
+        {
+            if (ModelState.IsValid)
+            {
+                Medication medicationToAdd = _unitOfWork.Medication.Get(x => x.Id == patientMedicationVM.Medication.Id);
+
+                if (medicationToAdd == null)
+                    return NotFound();
+
+                DateTime now = DateTime.UtcNow;
+                PatientMedication pm = new()
+                {
+                    IdPatient = patientMedicationVM.Patient.Id,
+                    IdMedication = patientMedicationVM.Medication.Id,
+                    CreatedByDoctorId = 309081,
+                    CreatedAt = now
+                };
+                _unitOfWork.PatientMedication.Add(pm);
+                _unitOfWork.Save();
+            }
+            //return RedirectToAction("Index");
+            return RedirectToAction("PatientMedication", new { id = patientMedicationVM.Patient.Id });
+        }
+
+        [HttpDelete]
+        public IActionResult SuspendMedication(string? idPatient, int? idMedication)
+        {
+            if (idPatient == null || idMedication <= 0 || idMedication == null)
+                return NotFound();
+
+            Patient? patient = _unitOfWork.Patient.Get(x => x.Id.Equals(idPatient));
+            Medication? treatment = _unitOfWork.Medication.Get(x => x.Id == idMedication);
+
+            if (patient == null | treatment == null)
+                return NotFound();
+
+            PatientMedication pm = new()
+            {
+                IdPatient = patient.Id,
+                IdMedication = treatment.Id
+            };
+
+            _unitOfWork.PatientMedication.Remove(pm);
+            _unitOfWork.Save();
+
+            return Ok();
+            //return RedirectToAction("PatientTreatment", new { id = idPatient}); 
+        }
+
+        [HttpGet]
+        public IActionResult PatientCondition(string? id)
+        {
+            if (id == null)
+                return NotFound();
+
+            PatientConditionVM patientConditionVM = new()
+            {
+                Patient = _unitOfWork.Patient.Get(x => x.Id == id, includeProperties: "PatientConditions.Conditions")
+            };
+
+            if (patientConditionVM.Patient == null)
+                return NotFound();
+
+            List<Conditions> allConditions = _unitOfWork.Conditions.GetAll().ToList();
+            List<Conditions> patientConditions = patientConditionVM.Patient.PatientConditions.Select(pc => pc.Conditions).ToList();
+            List<Conditions> conditionsNoAssociated = allConditions.Except(patientConditions).ToList();
+
+            patientConditionVM.Conditions = conditionsNoAssociated.Select(i => new SelectListItem
+            {
+                Text = i.Name,
+                Value = i.Id.ToString()
+            });
+
+            if (patientConditions == null)
+                patientConditionVM.PatientCondition = new List<Conditions>();
+
+            patientConditionVM.PatientCondition = patientConditions;
+            patientConditionVM.Condition = new Conditions();
+
+            return View(patientConditionVM);
+        }
+
+        [HttpPost]
+        public IActionResult PatientCondition(PatientConditionVM patientConditionVM)
+        {
+            if (ModelState.IsValid)
+            {
+                Conditions conditionToAdd = _unitOfWork.Conditions.Get(x => x.Id == patientConditionVM.Condition.Id);
+
+                if (conditionToAdd == null)
+                    return NotFound();
+
+                DateTime now = DateTime.UtcNow;
+                PatientCondition pm = new()
+                {
+                    IdPatient = patientConditionVM.Patient.Id,
+                    IdCondition = patientConditionVM.Condition.Id,
+                    CreatedByDoctorId = 309081,
+                    CreatedAt = now
+                };
+                _unitOfWork.PatientCondition.Add(pm);
+                _unitOfWork.Save();
+            }
+            //return RedirectToAction("Index");
+            return RedirectToAction("PatientCondition", new { id = patientConditionVM.Patient.Id });
+        }
+
+        [HttpDelete]
+        public IActionResult SuspendCondition(string? idPatient, int? idCondition)
+        {
+            if (idPatient == null || idCondition <= 0 || idCondition == null)
+                return NotFound();
+
+            Patient? patient = _unitOfWork.Patient.Get(x => x.Id.Equals(idPatient));
+            Conditions? condition = _unitOfWork.Conditions.Get(x => x.Id == idCondition);
+
+            if (patient == null | condition == null)
+                return NotFound();
+
+            PatientCondition pc = new()
+            {
+                IdPatient = patient.Id,
+                IdCondition = condition.Id
+            };
+
+            _unitOfWork.PatientCondition.Remove(pc);
+            _unitOfWork.Save();
+
+            return Ok();
+            //return RedirectToAction("PatientTreatment", new { id = idPatient}); 
+        }
 
         #region API
         //Muestra dataTable con la lista de pacientes ordenados por fecha de atencion
@@ -129,13 +375,36 @@ namespace Proyecto_EMUS.Areas.Medicine.Controllers
             return Json(new { data = patientList });
         }
 
+        [HttpGet]
+        public IActionResult GetAllPatientsNotes(string? id)
+        {
+
+            Patient patient = _unitOfWork.Patient.Get(x => x.Id == id, includeProperties: "ClinicalHistoryNotes");
+
+            if (patient == null)
+                return NotFound();
+
+            List<ClinicalHistoryNote> patientNotes = patient.ClinicalHistoryNotes.Select(note => new ClinicalHistoryNote
+            {
+                Id = note.Id,
+                Description = note.Description,
+                CreatedAt = note.CreatedAt,
+                PatientId = note.PatientId,
+                CreatedByDoctorId = note.CreatedByDoctorId
+
+
+            }).ToList();
+
+            return View(patientNotes);
+        }
+
         //PRUEBA
         [HttpGet]
         public IActionResult AddTreatmentToPatientAPI(string? id)
         {
             if (id == null)
-                return Json(new {data = new List<Treatment>()});
-                //return NotFound();
+                return Json(new { data = new List<Treatment>() });
+            //return NotFound();
 
             PatientTreatmentVM patientTreatmentVM = new()
             {
@@ -143,7 +412,7 @@ namespace Proyecto_EMUS.Areas.Medicine.Controllers
             };
 
             if (patientTreatmentVM.Patient == null)
-                return Json(new { data = new Patient()});
+                return Json(new { data = new Patient() });
             //return NotFound();
 
             List<Treatment> allTreatments = _unitOfWork.Treatment.GetAll().ToList();
@@ -157,14 +426,15 @@ namespace Proyecto_EMUS.Areas.Medicine.Controllers
             });
 
             if (patientTreatments == null)
-                patientTreatmentVM.PatientTreatments = new List <Treatment>();
+                patientTreatmentVM.PatientTreatments = new List<Treatment>();
 
             patientTreatmentVM.PatientTreatments = patientTreatments;
             patientTreatmentVM.Treatment = new Treatment();
 
-            return Json(new {data = patientTreatmentVM.Patient});
-            //return View(patientTreatmentVM);
+            return Json(new { data = patientTreatmentVM.Patient });
+            //return View(patientConditionVM);
         }
         #endregion
     }
 }
+

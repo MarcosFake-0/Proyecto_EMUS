@@ -1,0 +1,74 @@
+﻿@model PatientConditionVM
+
+@{
+    ViewData["Title"] = "Paciente " + @Model.Patient.Id;
+}
+
+<partial name="_Notifications" />
+
+<form method="post" asp-area="Medicine" asp-controller="Patient" asp-action="PatientCondition">
+    <div class="row d-flex justify-content-center">
+        <input asp-for="Patient.Id" hidden />
+
+        <div class="col-10">
+            <div class="border p-3 mt-4 row d-flex justify-content-center align-items-center">
+
+                <div class="mb-3 col-lg-6 col-sm-12">
+                    <label>Cédula: @Model.Patient.Id</label>
+                 </div>
+
+                <div class="mb-3 col-lg-6 col-sm-12">
+                    <label>Nombre completo: @Model.Patient.FirstName @Model.Patient.LastName</label>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Condition.Name" class="p-0"></label>
+                    <select asp-for="Condition.Id" asp-items="@Model.Conditions" class="form-select">
+                        <option disabled selected> --- Seleccione un padecimiento --- </option>
+                    </select>
+                    <span asp-validation-for="Condition.Id" class="text-danger"></span>
+                </div>
+
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th> Padecimientos del paciente</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @foreach (var obj in Model.PatientCondition.OrderBy(x => x.Name))
+                        {
+                            <tr>
+                                <td>@obj.Name</td>
+                                <td>
+                                    <a onclick="deleteCondition('@Model.Patient.Id', '@obj.Id')" class="btn btn-danger mx-2">
+                                        <i class="bi bi-arrow-down-circle-fill"></i> Suspender
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+        </div>
+            <button type="submit" class="btn btn-primary" style="width:150px">Agregar</button>
+            <a asp-area="Medicine" asp-controller="Patient" asp-action="MedicalRecord" asp-route-id="@Model.Patient.Id" style="width:150px" class="btn btn-secondary">Regresar</a>
+    </div>
+
+    </div>
+
+    <script>
+        function deleteCondition(idPatient, idCondition) {
+            fetch(`/Medicine/Patient/SuspendCondition?idPatient=${idPatient}&idCondition=${idCondition}`, {
+                method: 'DELETE'
+            }).then(response => {
+                if (response.ok) {
+                    location.reload();
+                } else {
+                    alert('Error al suspender el padecimiento');
+                }
+            });
+        }
+    </script>
+
+</form>
