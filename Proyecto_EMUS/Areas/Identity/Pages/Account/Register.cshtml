@@ -48,7 +48,7 @@
             @if (User.IsInRole(Proyecto_EMUS.Utilities.ProyectoEMUSRoles.Role_Admin))
             {
                 <div class="form-floating mb-3">
-                    <select asp-for="Input.Role" asp-items="@Model.Input.RoleList" class="form-select">
+                    <select asp-for="Input.Role" asp-items="@Model.Input.RoleList" class="form-select" id="selected">
                         <option disabled selected>--- Seleccione un Rol ---- </option>
                     </select>
                 </div>
@@ -59,7 +59,12 @@
                     <span asp-validation-for="Input.GMCNumber" class="text-danger"></span>
 
                 </div>
-
+            } else if (User.IsInRole(Proyecto_EMUS.Utilities.ProyectoEMUSRoles.Role_Doctor)) {
+                <div class="form-floating mb-3">
+                    <select asp-for="Input.Role" class="form-select" id="selected">
+                        <option>@Proyecto_EMUS.Utilities.ProyectoEMUSRoles.Role_Patient</option>
+                    </select>
+                </div>
             }
             
 

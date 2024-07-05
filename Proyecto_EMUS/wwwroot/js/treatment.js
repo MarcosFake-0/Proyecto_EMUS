@@ -20,9 +20,8 @@ function loadDataTable() {
 
                                 <a href="/Medicine/Treatment/upsert/${data}" class="btn btn-primary btn-lg">
 							    <i class="bi bi-pencil-square"></i></a>
-                                <a onClick=Delete(${data}') class="btn btn-danger btn-lg"> 
+                                <a onClick=Delete('${data}') class="btn btn-danger btn-lg"> 
 							    <i class="bi bi-trash"></i></a>
-
                             </div>
                           `
                 }
