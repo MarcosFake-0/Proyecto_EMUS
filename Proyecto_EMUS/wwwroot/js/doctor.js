@@ -20,26 +20,17 @@ function loadDataTable() {
             },
             { "data": "firstName", "width": "15%" },
             { "data": "lastName", "width": "15%" },           
+            { "data": "gmcNumber", "width": "20%"},
             {
-                "data": "gmcNumber", "width": "20%"
-            },
-            {
-                "data": "specialties",
-                "render": function (data) {
-                    return data.join(", ");
-                },
-                "width": "20%"
-            },
-            {
+                "data": "gmcNumber",
                 "render": function (data) {
                     return `
                         <div class="btn-group btn-lg">
 
                                 <a href="/Admin/Doctor/upsert/${data}" class="btn btn-primary btn-lg"> 
 							    <i class="bi bi-pencil-square"></i></a>
-                                <a onClick=Delete(${data}') class="btn btn-danger btn-lg"> 
+                                <a onClick=Delete(${data}) class="btn btn-danger btn-lg"> 
 							    <i class="bi bi-trash"></i></a>
-
                             </div>
                                 `
 
@@ -52,7 +43,7 @@ function loadDataTable() {
 
 function Delete(_id) {
     Swal.fire({
-        title: "¿Seguro desea eliminar?",
+        title: `¿Seguro desea eliminar al doctor(a) ${_id}?`,
         text: "No podrá deshacer la acción",
         icon: "warning",
         showCancelButton: true,
@@ -64,7 +55,7 @@ function Delete(_id) {
         if (result.isConfirmed) {
 
             $.ajax({
-                url: "/Medicine/Conditions/delete/" + _id,
+                url: "/Admin/Doctor/deleteDoctor/" + _id,
                 type: 'DELETE',
                 success: function (data) {
                     if (data.success) {

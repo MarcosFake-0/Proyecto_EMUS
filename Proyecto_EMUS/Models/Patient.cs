@@ -31,9 +31,6 @@ namespace Proyecto_EMUS.Models
         [Display(Name = "Doctor")]
         public int? AttendingDoctor { get; set; }
 
-        [ForeignKey("AttendingDoctor")]
-        public Doctor? Doctor { get; set; }
-
         [DataType(DataType.Date)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]
         [Display(Name = "Última fecha de atención")]

@@ -18,7 +18,7 @@ namespace Proyecto_EMUS.Models
 
         public string? UrlImage { get; set; }
 
-        public ICollection<DoctorSpecialty> DoctorSpecialties { get; set; }
+        public ICollection<DoctorSpecialty>? DoctorSpecialties { get; set; }
 
         public bool IsActive { get; set; } = true; 
     }

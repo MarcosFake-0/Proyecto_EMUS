@@ -7,6 +7,7 @@ using System.Text.Json.Serialization;
 using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
 using Proyecto_EMUS.Utilities;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Proyecto_EMUS.Areas.Admin.Controllers
 {
@@ -28,142 +29,207 @@ namespace Proyecto_EMUS.Areas.Admin.Controllers
             return View();
         }
 
-            [HttpGet]
-        public IActionResult GetAll()
-        {
-            //List<Doctor> doctorList = _unitOfWork.Doctor.GetAll(includeProperties:"DoctorSpecialty.Specialty").ToList();
-            //return View(doctorList);
-            var options = new JsonSerializerOptions
-            {
-                ReferenceHandler = ReferenceHandler.Preserve // Configurar para preservar referencias
-            };
-
-
-            var doctorList = _unitOfWork.Doctor.GetAll(includeProperties: "DoctorSpecialties.Specialty")
-                                .Select(doctor => new
-                                {
-                                    doctor.UrlImage,
-                                    doctor.FirstName,
-                                    doctor.LastName,
-                                    doctor.GMCNumber,
-                                    Specialties = doctor.DoctorSpecialties.Select(ds => new
-                                    {
-                                        ds.Specialty.Name
-                                    }).ToList()
-                                }).ToList();
-
-            return Json(new { data = doctorList });
-        }
 
         [HttpGet]
         public IActionResult Upsert(int? id)
         {
+            List<Specialty> allSpecialties = _unitOfWork.Specialty.GetAll().ToList();
             DoctorVM doctorVM = new DoctorVM();
 
-            if (id == null || id == 0)
+            //Crear doctor
+            if (id == null || id <= 0)
             {
                 doctorVM.Doctor = new Doctor();
-                doctorVM.Specialties = new List<Specialty>();
+                doctorVM.Specialties = allSpecialties.Select(i => new SelectListItem{
+                    Text = i.Name,
+                    Value = i.Id.ToString()
+                });
+                doctorVM.Specialty = new Specialty();
+                doctorVM.DoctorSpecialties = new List<Specialty>();
                 return View(doctorVM);
             }
 
+            //editar
             doctorVM.Doctor = _unitOfWork.Doctor.Get(x => x.GMCNumber == id, includeProperties: "DoctorSpecialties.Specialty");
 
             if (doctorVM.Doctor == null)
-            {
-                return NotFound();
-            }
+                return NotFound(); 
 
-            doctorVM.Specialties = _unitOfWork.Specialty.GetAll().ToList();
+            List<Specialty> doctorSpecialties = doctorVM.Doctor.DoctorSpecialties.Select(ds => ds.Specialty).ToList();
+            List<Specialty> doctorSpecialtiesNoAssociated = allSpecialties.Except(doctorSpecialties).ToList();
+
+            doctorVM.Specialties = doctorSpecialtiesNoAssociated.Select(i => new SelectListItem
+            {
+                Text = i.Name,
+                Value = i.Id.ToString()
+            });
+
+            doctorVM.DoctorSpecialties = doctorSpecialties;
+            doctorVM.Specialty = new Specialty();
 
             return View(doctorVM);
         }
 
+        private string UpsertImageDoctor(IFormFile? file, string? urlImage)
+        {
+            string wwwRootPath = _webHostEnvironment.WebRootPath;
+
+            if (file != null)
+            {
+                string fileName = Guid.NewGuid().ToString();
+                string extension = Path.GetExtension(file.FileName);
+                var uploads = Path.Combine(wwwRootPath, @"images\doctors");
+
+                if (urlImage != null)
+                {
+                    var oldImageUrl = Path.Combine(wwwRootPath, urlImage);
+
+                    if (System.IO.File.Exists(oldImageUrl))
+                        System.IO.File.Delete(oldImageUrl);
+                }
+
+                using (var fileStream = new FileStream(Path.Combine(uploads, fileName + extension), FileMode.Create))
+                {
+                    file.CopyTo(fileStream);
+                }
+
+                urlImage = fileName + extension;
+
+            }
+
+            return urlImage; 
+        }
 
         [HttpPost]
         public IActionResult Upsert(DoctorVM doctorVM, IFormFile? file)
         {
             if (ModelState.IsValid)
             {
-                string wwwRootPath = _webHostEnvironment.WebRootPath;
-
-                if (file != null)
+                if (doctorVM.IsCreated)
                 {
-                    string fileName = Guid.NewGuid().ToString();
-                    string extension = Path.GetExtension(file.FileName);
-                    var uploads = Path.Combine(wwwRootPath, @"images\doctors");
-
-                    if (doctorVM.Doctor.UrlImage != null)
+                    if (_unitOfWork.Specialty.Get(x => x.Id == doctorVM.Specialty.Id) != null)
                     {
-                        var oldImageUrl = Path.Combine(wwwRootPath, doctorVM.Doctor.UrlImage);
+                        if (_unitOfWork.Doctor.Get(x => x.GMCNumber == doctorVM.Doctor.GMCNumber) != null)
+                        {
+                            TempData["error"] = "No se puedo crear el doctor porque ya se encuentra registrado el número de colegiado"; 
+                        } else
+                        {
+                            doctorVM.Doctor.UrlImage = UpsertImageDoctor(file, doctorVM.Doctor.UrlImage);
+                            _unitOfWork.Doctor.Add(doctorVM.Doctor);
+                            DoctorSpecialty ds = new()
+                            {
+                                GMCNumber = doctorVM.Doctor.GMCNumber,
+                                IdSpecialty = doctorVM.Specialty.Id
+                            };
+                            _unitOfWork.DoctorSpecialty.Add(ds);
+                            _unitOfWork.Save();
+                            TempData["success"] = "Doctor agregado con éxito";
+                        }
 
-                        if (System.IO.File.Exists(oldImageUrl))
-                            System.IO.File.Delete(oldImageUrl);
-                    }
-
-                    using (var fileStream = new FileStream(Path.Combine(uploads, fileName + extension), FileMode.Create))
+                    } else
                     {
-                        file.CopyTo(fileStream);
-                    }
-
-                    doctorVM.Doctor.UrlImage = @"images\doctors\" + fileName + extension;
-
-                }
-
-                Doctor doctorExist = _unitOfWork.Doctor.Get(x => x.GMCNumber == doctorVM.Doctor.GMCNumber);
-
-                if (doctorExist == null)
-                {
-                    _unitOfWork.Doctor.Add(doctorVM.Doctor);
-
-                    DoctorSpecialty ds = new DoctorSpecialty();
-                    ds.Doctor = doctorVM.Doctor;
-
-                    foreach (Specialty specialty in doctorVM.Specialties)
-                    {
-                        ds.Specialty = specialty;
-                        _unitOfWork.DoctorSpecialty.Add(ds);
-                    }
+                        TempData["error"] = "No se pudo agregar al doctor";
+                    }    
                 }
                 else
                 {
+                    doctorVM.Doctor.UrlImage = UpsertImageDoctor(file, doctorVM.Doctor.UrlImage);
+                    if (doctorVM.DoctorSpecialties == null)
+                    {
+                        DoctorSpecialty ds = new()
+                        {
+                            IdSpecialty = doctorVM.Specialty.Id,
+                            GMCNumber = doctorVM.Doctor.GMCNumber
+                        };
+                        _unitOfWork.DoctorSpecialty.Add(ds);
+                    }
                     _unitOfWork.Doctor.Update(doctorVM.Doctor);
                     _unitOfWork.Save();
-                    TempData["success"] = "Vehicle saved successfully";
+                    TempData["success"] = "Doctor editado con éxito";
                 }
             }
 
             return RedirectToAction("Index");
         }
 
-        //PENDIENTE: VALIDAR SI EN LA VISTA SE PUEDE ENRUTAR A ESTAS ACCIONES CON GMCNUMBER Y IDSPECIALTY Y NO CON id 
+ 
+
+        #region API
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            var doctorList = _unitOfWork.Doctor.GetAll()
+                .Select(doctor => new
+                {
+                    doctor.UrlImage,
+                    doctor.FirstName,
+                    doctor.LastName,
+                    doctor.GMCNumber,
+                }).ToList();
+
+            return Json(new { data = doctorList });
+        }
+
 
         [HttpDelete]
-        public IActionResult DeleteSpecialty(int? GMCNumber, int IdSpecialty)
+        public IActionResult DeleteDoctor(int? id)
         {
-            DoctorSpecialty dsToDelete = _unitOfWork.DoctorSpecialty.Get(x => x.IdSpecialty == IdSpecialty && x.GMCNumber == GMCNumber);
+            Doctor doctorToDelete = _unitOfWork.Doctor.Get(x => x.GMCNumber == id);
+            if (doctorToDelete == null)
+                return Json(new { success = false, message = "Error al eliminar" });
+
+            _unitOfWork.Doctor.Remove(doctorToDelete);
+            _unitOfWork.Save();
+            return Json(new { success = true, message = "Doctor(a) eliminado(a) con éxito" });
+        }
+
+        [HttpDelete]
+        public IActionResult DeleteSpecialty(int? gmcNumber, int idSpecialty)
+        {
+            DoctorSpecialty dsToDelete = _unitOfWork.DoctorSpecialty.Get(x => x.IdSpecialty == idSpecialty && x.GMCNumber == gmcNumber);
 
             if (dsToDelete != null)
             {
                 _unitOfWork.DoctorSpecialty.Remove(dsToDelete);
                 _unitOfWork.Save();
-                TempData["success"] = "Specialidad borrada";
+                return Ok();
             }
-
-            return RedirectToAction("Upsert", new { Id = GMCNumber });
+            return Json(new { success = false, message = "Error al eliminar" });
         }
 
-        [HttpDelete]
-        public IActionResult DeleteDoctor(int? GMCNumber)
+        [HttpPost]
+        public IActionResult AddDoctorSpecialty(int? gmcNumber, int? idSpecialty)
         {
-            Doctor doctorToDelete = _unitOfWork.Doctor.Get(x => x.GMCNumber == GMCNumber);
-            if (doctorToDelete != null)
+            if (gmcNumber == null || idSpecialty == null)
             {
-                _unitOfWork.Doctor.Remove(doctorToDelete);
-                _unitOfWork.Save();
-                TempData["success"] = "Se ha eliminado el doctor";
+                return Json(new { success = false, message = "GMC Number o Specialty Id son nulos" });
             }
-            return RedirectToAction("Index");
+
+            Doctor d = _unitOfWork.Doctor.Get(x => x.GMCNumber == gmcNumber);
+            Specialty s = _unitOfWork.Specialty.Get(x => x.Id == idSpecialty);
+
+            if (d == null)
+            {
+                return Json(new { success = false, message = "Doctor no encontrado" });
+            }
+
+            if (s == null)
+            {
+                return Json(new { success = false, message = "Especialidad no encontrada" });
+            }
+
+            DoctorSpecialty ds = new DoctorSpecialty()
+            {
+                GMCNumber = (int)gmcNumber,
+                IdSpecialty = (int)idSpecialty
+            };
+
+            _unitOfWork.DoctorSpecialty.Add(ds);
+            _unitOfWork.Save();
+
+            return Json(new { success = true, message = "Especialidad agregada exitosamente" });
         }
+
+        #endregion
     }
 }

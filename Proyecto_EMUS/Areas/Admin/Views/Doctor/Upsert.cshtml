@@ -1,12 +1,171 @@
 ﻿@model DoctorVM
+<div class="container">
+<form method="post" enctype="multipart/form-data" onsubmit="return validateSpecialtySelection();">
+    <input hidden asp-for="Doctor.UrlImage" />
 
-<!--Si DoctorVM.Doctor.GMCNumber == 0 
-        todos los cambos vacios
-        no mostrar boton de eliminar especialidad en la lista de especialidades
-        no mostrar tabla de especialidades ni de agregar especialidad 
+    <div class="border p-3 mt-4">
+        <div class="row pb-2">
+            <h2 class="text-primary"> @(Model.Doctor.GMCNumber == 0 ? "Crear" : "Editar") Doctor</h2>
+            @if (Model.Doctor.GMCNumber == 0)
+            {
+                Model.IsCreated = true; 
+                <input hidden asp-for="IsCreated" />
+            }
+        </div>
+    </div>
 
-    Si no 
-       todos los campos llenos
-       mostrar boton de eliminar especialidad 
-       mostrar tabla de especialidades y de agregar especialidad 
--->
+    <div class="border p-3 mt-4">
+        <div class="mb-3">
+            <label asp-for="Doctor.GMCNumber" class="p-0"></label>
+            <input asp-for="Doctor.GMCNumber" type="text" class="form-control" />
+            <span asp-validation-for="Doctor.GMCNumber" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Doctor.FirstName" class="p-0"></label>
+            <input asp-for="Doctor.FirstName" type="text" class="form-control" />
+            <span asp-validation-for="Doctor.FirstName" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Doctor.LastName" class="p-0"></label>
+            <input asp-for="Doctor.LastName" type="text" class="form-control" />
+            <span asp-validation-for="Doctor.LastName" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Doctor.UrlImage" class="p-0"></label>
+            <input id="uploadBox" name="file" type="file" class="form-control" />
+            <span asp-validation-for="Doctor.UrlImage" class="text-danger"></span>
+        </div>
+
+            <div class="mb-3">
+                <label class="p-0">Especialidades</label>
+                <select asp-for="Specialty.Id" asp-items="@Model.Specialties" class="form-select" id="specialtySelect">
+                    <option disabled selected> --- Seleccione una especialidad --- </option>
+                </select>
+                <span asp-validation-for="Specialty.Id" class="text-danger"></span>
+
+                @if (Model.DoctorSpecialties.Count() != 0)
+                {
+                    <a onclick="addSpecialty('@Model.Doctor.GMCNumber')" class="btn btn-secondary">
+                        <i class="bi bi-plus-circle"></i> Agregar Especialidad
+                    </a>
+                }
+        </div>
+
+        @if (Model.DoctorSpecialties.Count() != 0)
+        {
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th> Especialidades del doctor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var obj in Model.DoctorSpecialties.OrderBy(x => x.Name))
+                    {
+                        <tr>
+                            <td>@obj.Name</td>
+                            <td>
+                                <a onclick="deleteSpecialty('@Model.Doctor.GMCNumber', '@obj.Id')" class="btn btn-danger mx-2">
+                                    <i class="bi bi-arrow-down-circle-fill"></i> Quitar
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+
+        <button type="submit" class="btn btn-primary" style="width:150px">Guardar</button>
+        <a asp-area="Admin" asp-controller="Doctor" asp-action="Index" style="width:150px" class="btn btn-secondary">Regresar</a>
+    </div>
+</form>
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+<script>
+        function deleteSpecialty(gmcNumber, idSpecialty) {
+            fetch(`/Admin/Doctor/DeleteSpecialty?gmcNumber=${gmcNumber}&idSpecialty=${idSpecialty}`, {
+                method: 'DELETE'
+            })
+                .then(response => {
+                    if (response.ok) {
+                        location.reload();
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Error al eliminar la especialidad.'
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error en la conexión:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Error al conectar con el endpoint.'
+                    });
+                });
+        }
+
+        function addSpecialty(gmcNumber) {
+            var specialtySelect = document.getElementById('specialtySelect');
+            var idSpecialty = specialtySelect.value;
+
+            if (idSpecialty === "" || idSpecialty == null) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Warning',
+                    text: 'Por favor, seleccione una especialidad.'
+                });
+                return;
+            }
+
+            fetch(`/Admin/Doctor/AddDoctorSpecialty?gmcNumber=${gmcNumber}&idSpecialty=${idSpecialty}`, {
+                method: 'POST'
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        location.reload();
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: data.message
+                        });
+                    }
+                })
+                .catch(error => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Error al conectar con el endpoint.'
+                    });
+                });
+        }
+
+
+    function validateSpecialtySelection() {
+        var specialtySelect = document.getElementById('specialtySelect');
+        var specialtiesCount = @Model.DoctorSpecialties.Count();
+
+        if (specialtiesCount === 0 && (specialtySelect.value === "" || specialtySelect.selectedIndex === 0)) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Warning',
+                text: 'Por favor, seleccione al menos una especialidad.'
+            });
+            return false; // Stop form submission
+        }
+        return true; // Allow form submission
+    }
+</script>
+</div>
