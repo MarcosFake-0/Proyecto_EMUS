@@ -15,10 +15,10 @@ namespace Proyecto_EMUS.Models
         [Required]
         public DateTime CreatedAt { get; set; }
 
-        public string PatientId { get; set; }
+        public string? PatientId { get; set; }
 
         [ForeignKey("PatientId")]
-        public Patient Patient { get; set; }
+        public Patient? Patient { get; set; }
 
         [Required]
         public int CreatedByDoctorId { get; set; }
